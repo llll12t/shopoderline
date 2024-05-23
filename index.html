@@ -98,7 +98,7 @@
 
             // Function to fetch products from Google Sheets
             const fetchProducts = async () => {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyh1Stgvdmh_claymNZT9_JupbmWzcYdC61bO7x_a0yvt0HK3y6rXXFu2_zM4sH1Gcz/exec'); // ใส่ URL ของ Apps Script Web App
+                const response = await fetch('https://script.google.com/macros/s/AKfycbydUzVCJCyevlQ3yQob6I6MkTdJ674TZTCeotIXfJ_vOemfCo4h8ssMVcQq_j4nu4z9/exec'); // ใส่ URL ของ Apps Script Web App
                 const products = await response.json();
                 products.forEach(product => {
                     const productElement = document.createElement('div');
@@ -169,7 +169,7 @@
                 }
 
                 for (const item of cart) {
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbyh1Stgvdmh_claymNZT9_JupbmWzcYdC61bO7x_a0yvt0HK3y6rXXFu2_zM4sH1Gcz/exec', { // ใส่ URL ของ Apps Script Web App
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbydUzVCJCyevlQ3yQob6I6MkTdJ674TZTCeotIXfJ_vOemfCo4h8ssMVcQq_j4nu4z9/exec', { // ใส่ URL ของ Apps Script Web App
                         method: 'POST',
                         body: JSON.stringify({ ...item, buyerName, lineUserId })
                     });
@@ -186,7 +186,7 @@
             // Function to cancel order
             const cancelOrder = async () => {
                 if (lastOrderId) {
-                    await fetch('https://script.google.com/macros/s/AKfycbyh1Stgvdmh_claymNZT9_JupbmWzcYdC61bO7x_a0yvt0HK3y6rXXFu2_zM4sH1Gcz/exec?action=cancelOrder', { // ใส่ URL ของ Apps Script Web App
+                    await fetch('https://script.google.com/macros/s/AKfycbydUzVCJCyevlQ3yQob6I6MkTdJ674TZTCeotIXfJ_vOemfCo4h8ssMVcQq_j4nu4z9/exec?action=cancelOrder', { // ใส่ URL ของ Apps Script Web App
                         method: 'POST',
                         body: JSON.stringify({ orderId: lastOrderId })
                     });
