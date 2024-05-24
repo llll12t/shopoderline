@@ -96,7 +96,7 @@
 
             // Function to fetch products from Google Sheets
             const fetchProducts = async () => {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyIznc455IVKF1m2fNgtoh-Vfe5uhC4VVGt4FsigxaGlymuFd5uXGJa-SmYUfsIqif5/exec'); // Replace with your Apps Script Web App URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbzO7xzjPf9JISoyVLuf3fDGtmi975jWfqo9srvfySXFm0xbyjIvjmp8FNNxfGPTGZCK/exec'); // Replace with your Apps Script Web App URL
                 const products = await response.json();
                 products.forEach(product => {
                     const productElement = document.createElement('div');
@@ -172,7 +172,7 @@
                     items: cart
                 };
 
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyIznc455IVKF1m2fNgtoh-Vfe5uhC4VVGt4FsigxaGlymuFd5uXGJa-SmYUfsIqif5/exec', { // Replace with your Apps Script Web App URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbzO7xzjPf9JISoyVLuf3fDGtmi975jWfqo9srvfySXFm0xbyjIvjmp8FNNxfGPTGZCK/exec', { // Replace with your Apps Script Web App URL
                     method: 'POST',
                     body: JSON.stringify(orderData)
                 });
