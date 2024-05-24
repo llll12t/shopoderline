@@ -29,9 +29,6 @@
                 <button id="checkout" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
                     Confirm Order
                 </button>
-                <button id="cancel-order" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-                    Cancel Order
-                </button>
             </div>
         </div>
 
@@ -48,7 +45,6 @@
             const totalPriceElement = document.getElementById('total-price');
             const productListContainer = document.getElementById('product-list');
             const checkoutButton = document.getElementById('checkout');
-            const cancelOrderButton = document.getElementById('cancel-order');
             const buyerNameInput = document.getElementById('buyer-name');
             const lineUserIdInput = document.getElementById('line-user-id');
             let lastOrderId = null;
@@ -190,22 +186,8 @@
                 lineUserIdInput.value = '';
             };
 
-            // Function to cancel order
-            const cancelOrder = async () => {
-                if (lastOrderId) {
-                    await fetch('https://script.google.com/macros/s/AKfycbzlpus3kVr1YfIxc7fEWQ5Fd4CR0JLMa_QWMWR8xGd8rCRVnAy5pCFSJvVP5ilb7hx9/exec?action=cancelOrder', { // Replace with your Apps Script Web App URL
-                        method: 'POST',
-                        body: JSON.stringify({ orderId: lastOrderId })
-                    });
-                    alert('Order cancelled!');
-                    lastOrderId = null;
-                } else {
-                    alert('No order to cancel.');
-                }
-            };
-
+   
             checkoutButton.addEventListener('click', sendCartData);
-            cancelOrderButton.addEventListener('click', cancelOrder);
 
             fetchProducts();
         });
