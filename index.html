@@ -16,7 +16,7 @@
 
         <!-- Cart Section -->
         <div id="cart" class="my-4 p-4 bg-white rounded-lg shadow-md">
-            <h2 class="text-xl font-semibold">ร้านเล็กๆ</h2>
+            <h2 class="text-xl font-semibold">ร้านเล็กๆน้อยๆ</h2>
             <div id="cart-items" class="mt-4">
                 <p class="text-gray-600">Your cart is empty.</p>
             </div>
@@ -96,7 +96,7 @@
 
             // Function to fetch products from Google Sheets
             const fetchProducts = async () => {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbzO7xzjPf9JISoyVLuf3fDGtmi975jWfqo9srvfySXFm0xbyjIvjmp8FNNxfGPTGZCK/exec'); // Replace with your Apps Script Web App URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwzhHiiOqatc2gQfkEHXA-HgO12RgVpNCgmFa2SpSy0VrltTyqLKVqRCMv9GtFH_T9U/exec'); // Replace with your Apps Script Web App URL
                 const products = await response.json();
                 products.forEach(product => {
                     const productElement = document.createElement('div');
@@ -172,7 +172,7 @@
                     items: cart
                 };
 
-                const response = await fetch('https://script.google.com/macros/s/AKfycbzO7xzjPf9JISoyVLuf3fDGtmi975jWfqo9srvfySXFm0xbyjIvjmp8FNNxfGPTGZCK/exec', { // Replace with your Apps Script Web App URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwzhHiiOqatc2gQfkEHXA-HgO12RgVpNCgmFa2SpSy0VrltTyqLKVqRCMv9GtFH_T9U/exec', { // Replace with your Apps Script Web App URL
                     method: 'POST',
                     body: JSON.stringify(orderData)
                 });
