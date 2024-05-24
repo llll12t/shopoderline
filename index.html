@@ -100,7 +100,7 @@
 
             // Function to fetch products from Google Sheets
             const fetchProducts = async () => {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyNqXeC_ws5jKhFmoE_b8Yj6kQUF062w73naTjWYaPKV7I2Fnq6VGpaopLMv4rFqnja/exec'); // Replace with your Apps Script Web App URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbylFXfizM9c04EycF0yD6g6M6wokYXAEjpERz82FCOXP1NKodv0Uq-QJ3lgZ5r2fct6/exec'); // Replace with your Apps Script Web App URL
                 const products = await response.json();
                 products.forEach(product => {
                     const productElement = document.createElement('div');
@@ -176,7 +176,7 @@
                     items: cart
                 };
 
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyNqXeC_ws5jKhFmoE_b8Yj6kQUF062w73naTjWYaPKV7I2Fnq6VGpaopLMv4rFqnja/exec', { // Replace with your Apps Script Web App URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbylFXfizM9c04EycF0yD6g6M6wokYXAEjpERz82FCOXP1NKodv0Uq-QJ3lgZ5r2fct6/exec', { // Replace with your Apps Script Web App URL
                     method: 'POST',
                     body: JSON.stringify(orderData)
                 });
@@ -193,7 +193,7 @@
             // Function to cancel order
             const cancelOrder = async () => {
                 if (lastOrderId) {
-                    await fetch('https://script.google.com/macros/s/AKfycbyNqXeC_ws5jKhFmoE_b8Yj6kQUF062w73naTjWYaPKV7I2Fnq6VGpaopLMv4rFqnja/exec?action=cancelOrder', { // Replace with your Apps Script Web App URL
+                    await fetch('https://script.google.com/macros/s/AKfycbylFXfizM9c04EycF0yD6g6M6wokYXAEjpERz82FCOXP1NKodv0Uq-QJ3lgZ5r2fct6/exec?action=cancelOrder', { // Replace with your Apps Script Web App URL
                         method: 'POST',
                         body: JSON.stringify({ orderId: lastOrderId })
                     });
