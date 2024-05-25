@@ -96,9 +96,10 @@
                     productElement.setAttribute('data-name', product.name);
                     productElement.setAttribute('data-price-hot', product.priceHot);
                     productElement.setAttribute('data-price-cold', product.priceCold);
+                    productElement.setAttribute('data-image', product.image);
 
                     productElement.innerHTML = `
-                        <img src="https://via.placeholder.com/100" alt="Product" class="w-24 h-24 object-cover rounded-md">
+                        <img src="${product.image}" alt="Product" class="w-24 h-24 object-cover rounded-md">
                         <div class="flex-grow ml-4">
                             <h2 class="text-lg font-semibold text-gray-900">${product.name}</h2>
                             <p class="text-gray-600"><span class="product-price">${product.priceHot}</span> บาท</p>
@@ -162,22 +163,3 @@
 
                 const response = await fetch('https://script.google.com/macros/s/AKfycbyDpTcy1V_mYZ_hLDMYdD_-NM_NiBccs78Y0SPdoIggP-vZTMPw4fTaUimp1si1xkhP/exec', {
                     method: 'POST',
-                    body: JSON.stringify(orderData)
-                });
-                const responseData = await response.json();
-                lastOrderId = responseData.orderId;
-
-                alert('Checkout successful!');
-                cart = [];
-                updateCartUI();
-                buyerNameInput.value = '';
-                lineUserIdInput.value = '';
-            };
-
-            checkoutButton.addEventListener('click', sendCartData);
-
-            fetchProducts();
-        });
-    </script>
-</body>
-</html>
