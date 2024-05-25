@@ -99,7 +99,7 @@
                         productElement.setAttribute('data-price-cold', product.priceCold);
 
                         // Check if imageUrl is present and valid
-                        const imageUrl = product.imageUrl ? product.imageUrl : 'https://via.placeholder.com/100';
+                        const imageUrl = product.imageUrl || 'https://via.placeholder.com/100';
 
                         productElement.innerHTML = `
                             <img src="${imageUrl}" alt="Product" class="w-24 h-24 object-cover rounded-md">
