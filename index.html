@@ -107,6 +107,7 @@
                         const productElement = document.createElement('div');
                         productElement.classList.add('bg-white', 'p-4', 'rounded-lg', 'shadow-lg', 'flex', 'items-center');
                         productElement.setAttribute('data-id', product.id);
+                        productElement.setAttribute('data-image', product.image);
                         productElement.setAttribute('data-name', product.name);
                         productElement.setAttribute('data-price-hot', product.priceHot);
                         productElement.setAttribute('data-price-cold', product.priceCold);
@@ -114,7 +115,7 @@
                         const imageUrl = product.imageUrl || 'https://via.placeholder.com/100';
 
                         productElement.innerHTML = `
-                            <img src="${imageUrl}" alt="Product" class="w-24 h-24 object-cover rounded-md">
+                            <img src="${product.image}" alt="Product" class="w-24 h-24 object-cover rounded-md">
                             <div class="flex-grow ml-4">
                                 <h2 class="text-md font-semibold text-gray-900">${product.name}</h2>
                                 <p class="text-gray-600"><span class="product-price">${product.priceHot}</span> บาท</p>
