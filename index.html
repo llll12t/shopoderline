@@ -121,7 +121,7 @@ document.getElementById('reward-checkbox').addEventListener('change', updateCart
                     }
                 });
                 try {
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbxerI3SzhvjS_weFkVcjEad-DW-BHTYR042kL_fEg4XNUY5EJ6zFxWL4d21BDUYWIM/exec');
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbxMaVq5BtC8QcM3qJ3MWANYQaL7NxDJI5A56w9XNT_fYdEdEV7qo9aqGI9TP85XXpv4/exec');
                     const products = await response.json();
                     products.forEach(product => {
                         const productElement = document.createElement('div');
@@ -229,7 +229,7 @@ document.getElementById('reward-checkbox').addEventListener('change', updateCart
             reward: useReward // เพิ่มข้อมูลการใช้ส่วนลด
         };
 
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxerI3SzhvjS_weFkVcjEad-DW-BHTYR042kL_fEg4XNUY5EJ6zFxWL4d21BDUYWIM/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxMaVq5BtC8QcM3qJ3MWANYQaL7NxDJI5A56w9XNT_fYdEdEV7qo9aqGI9TP85XXpv4/exec', {
             method: 'POST',
             body: JSON.stringify(orderData)
         });
