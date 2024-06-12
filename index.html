@@ -24,6 +24,14 @@
                 <strong>รวม : <span id="total-price">0.00</span> บาท</strong>
             </div>
             <input id="buyer-name" type="text" class="mt-4 p-4 w-full text-center bg-gray-100 border border-gray-100 rounded" placeholder="พิมพ์ชื่อของคุณ">
+            <!-- ส่วนที่เพิ่มเช็คบ็อกซ์ -->
+            <div class="mt-4">
+                <label class="inline-flex items-center">
+                    <input id="reward-checkbox" type="checkbox" class="form-checkbox h-5 w-5 text-green-600">
+                    <span class="ml-2 text-gray-700">ใช้ส่วนลด 35 บาท</span>
+                </label>
+            </div>
+
             <div class="flex mt-4 space-x-4">
                 <button id="checkout" class="w-full bg-green-800 text-white py-2 px-4 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-opacity-50">
                     สั่งซื้อ รับคิว
@@ -61,35 +69,47 @@
 
             initializeLiff();
 
-            const updateCartUI = () => {
-                cartItemsContainer.innerHTML = '';
-                if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = '<p class="text-gray-600">Your cart is empty.</p>';
-                } else {
-                    cart.forEach((item, index) => {
-                        const cartItem = document.createElement('div');
-                        cartItem.classList.add('flex', 'justify-between', 'items-center', 'my-2');
-                        cartItem.innerHTML = `
-                            <span>${item.name} (${item.option})</span>
-                            <span>${item.price.toFixed(2)} บาท</span>
-                            <button class="ml-4 bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 remove-from-cart" data-index="${index}">
-                                ลบ
-                            </button>
-                        `;
-                        cartItemsContainer.appendChild(cartItem);
-                    });
-                }
-                const totalPrice = cart.reduce((total, item) => total + item.price, 0);
-                totalPriceElement.textContent = totalPrice.toFixed(2);
+           const updateCartUI = () => {
+    cartItemsContainer.innerHTML = '';
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-gray-600">Your cart is empty.</p>';
+    } else {
+        cart.forEach((item, index) => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('flex', 'justify-between', 'items-center', 'my-2');
+            cartItem.innerHTML = `
+                <span>${item.name} (${item.option})</span>
+                <span>${item.price.toFixed(2)} บาท</span>
+                <button class="ml-4 bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 remove-from-cart" data-index="${index}">
+                    ลบ
+                </button>
+            `;
+            cartItemsContainer.appendChild(cartItem);
+        });
+    }
 
-                document.querySelectorAll('.remove-from-cart').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const index = e.target.getAttribute('data-index');
-                        cart.splice(index, 1);
-                        updateCartUI();
-                    });
-                });
-            };
+    let totalPrice = cart.reduce((total, item) => total + item.price, 0);
+    const useReward = document.getElementById('reward-checkbox').checked;
+
+    if (useReward) {
+        totalPrice -= 35;
+    }
+
+    totalPrice = totalPrice < 0 ? 0 : totalPrice;
+    totalPriceElement.textContent = totalPrice.toFixed(2);
+
+    document.querySelectorAll('.remove-from-cart').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const index = e.target.getAttribute('data-index');
+            cart.splice(index, 1);
+            updateCartUI();
+        });
+    });
+};
+
+// อัพเดตฟังก์ชัน fetchProducts
+document.getElementById('reward-checkbox').addEventListener('change', updateCartUI);
+
 
             const fetchProducts = async () => {
                 Swal.fire({
@@ -168,62 +188,66 @@
                 }
             };
 
-            const sendCartData = async () => {
-                const buyerName = buyerNameInput.value.trim();
-                const lineUserId = lineUserIdInput.value.trim();
-                if (buyerName === '' || lineUserId === '') {
-                    alert('Please enter your name and LINE User ID.');
-                    return;
-                }
+           const sendCartData = async () => {
+    const buyerName = buyerNameInput.value.trim();
+    const lineUserId = lineUserIdInput.value.trim();
+    const useReward = document.getElementById('reward-checkbox').checked;
 
-                const confirmation = await Swal.fire({
-                    title: 'ยืนยันการสั่งซื้อ',
-                    text: "คุณแน่ใจหรือไม่ว่าต้องการสั่งซื้อ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ใช่, สั่งซื้อ!'
-                });
+    if (buyerName === '' || lineUserId === '') {
+        alert('Please enter your name and LINE User ID.');
+        return;
+    }
 
-                if (!confirmation.isConfirmed) {
-                    return;
-                }
+    const confirmation = await Swal.fire({
+        title: 'ยืนยันการสั่งซื้อ',
+        text: "คุณแน่ใจหรือไม่ว่าต้องการสั่งซื้อ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, สั่งซื้อ!'
+    });
 
-                Swal.fire({
-                    title: 'กำลังส่งข้อมูล',
-                    text: 'กรุณารอสักครู่...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
+    if (!confirmation.isConfirmed) {
+        return;
+    }
 
-                try {
-                    const orderData = {
-                        buyerName,
-                        lineUserId,
-                        items: cart
-                    };
+    Swal.fire({
+        title: 'กำลังส่งข้อมูล',
+        text: 'กรุณารอสักครู่...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
 
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbxerI3SzhvjS_weFkVcjEad-DW-BHTYR042kL_fEg4XNUY5EJ6zFxWL4d21BDUYWIM/exec', {
-                        method: 'POST',
-                        body: JSON.stringify(orderData)
-                    });
-                    const responseData = await response.json();
-                    lastOrderId = responseData.orderId;
+    try {
+        const orderData = {
+            buyerName,
+            lineUserId,
+            items: cart,
+            reward: useReward // เพิ่มข้อมูลการใช้ส่วนลด
+        };
 
-                    Swal.fire('สำเร็จ!', 'คำสั่งซื้อของคุณถูกส่งเรียบร้อยแล้ว!', 'success');
-                    cart = [];
-                    updateCartUI();
-                    buyerNameInput.value = '';
-                    liff.closeWindow(); // Close the LIFF window
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxerI3SzhvjS_weFkVcjEad-DW-BHTYR042kL_fEg4XNUY5EJ6zFxWL4d21BDUYWIM/exec', {
+            method: 'POST',
+            body: JSON.stringify(orderData)
+        });
+        const responseData = await response.json();
+        lastOrderId = responseData.orderId;
 
-                } catch (error) {
-                    console.error('Error sending order:', error);
-                    Swal.fire('Error', 'เกิดข้อผิดพลาดในการส่งคำสั่งซื้อ กรุณาลองใหม่.', 'error');
-                }
-            };
+        Swal.fire('สำเร็จ!', 'คำสั่งซื้อของคุณถูกส่งเรียบร้อยแล้ว!', 'success');
+        cart = [];
+        updateCartUI();
+        buyerNameInput.value = '';
+        liff.closeWindow(); // Close the LIFF window
+
+    } catch (error) {
+        console.error('Error sending order:', error);
+        Swal.fire('Error', 'เกิดข้อผิดพลาดในการส่งคำสั่งซื้อ กรุณาลองใหม่.', 'error');
+    }
+};
+
 
             checkoutButton.addEventListener('click', sendCartData);
 
