@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ร้านกาแฟ</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body style="background-color:#ADA2A2">
+    <div id="app" class="container mx-auto p-4">
+        <header class="text-center py-2 rounded-lg shadow-md" style="background-color: #574040;">
+            <h1 class="text-xl font-bold text-white">ร้านกาแฟเล็กๆ</h1>
+        </header>
+
+        <div id="cart" class="my-4 p-4 bg-white rounded-lg shadow-md">
+            <input id="line-user-id" type="text" class="mt-4 p-2 text-center w-full bg-gray-100 border border-gray-100 rounded-full" placeholder="LINE User ID" readonly>
+
+            <div id="cart-items" class="mt-4 p-5 text-sm bg-green-50 rounded">
+                <p class="text-gray-600">เลือกรายการ </p>
+            </div>
+            <div id="cart-total" class="mt-4">
+                <strong>รวม : <span id="total-price">0.00</span> บาท</strong>
+            </div>
+            <div id="points-section" class="mt-4 p-4 bg-gray-100 rounded">
+                <p class="text-gray-600">แต้มสะสม: <span id="user-points">0</span> แต้ม</p>
+                <label class="inline-flex items-center mt-2">
+                    <input type="checkbox" id="use-points-checkbox">
+                    <span class="ml-2">ใช้ 10 แต้ม ลดราคา 35 บาท</span>
+                </label>
+            </div>
+            <input id="buyer-name" type="text" class="mt-4 p-4 w-full text-center bg-gray-100 border border-gray-100 rounded" placeholder="พิมพ์ชื่อของคุณ">
+            <div class="flex mt-4 space-x-4">
+                <button id="checkout" class="w-full bg-green-800 text-white py-2 px-4 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-opacity-50">
+                    สั่งซื้อ รับคิว
+                </button>
+            </div>
+        </div>
+
+        <div id="product-list" class="grid grid-cols-1 gap-2 mt-2"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let cart = [];
+            let userPoints = 0;
+            const cartItemsContainer = document.getElementById('cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+            const productListContainer = document.getElementById('product-list');
+            const checkoutButton = document.getElementById('checkout');
+            const buyerNameInput = document.getElementById('buyer-name');
+            const lineUserIdInput = document.getElementById('line-user-id');
+            const userPointsElement = document.getElementById('user-points');
+            const usePointsCheckbox = document.getElementById('use-points-checkbox');
+            let lastOrderId = null;
+
+            async function initializeLiff() {
+                try {
+                    await liff.init({ liffId: '2005371720-BEWa6pOl' });
+                    if (liff.isLoggedIn()) {
+                        const profile = await liff.getProfile();
+                        lineUserIdInput.value = profile.userId;
+                        fetchUserPoints(profile.userId);
+                    } else {
+                        liff.login();
+                    }
+                } catch (error) {
+                    console.error('Error initializing LIFF:', error);
+                }
+            }
+
+            async function fetchUserPoints(userId) {
+                try {
+                    const response = await fetch(`https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_URL?userId=${userId}`);
+                    const data = await response.json();
+                    userPoints = data.points;
+                    userPointsElement.textContent = userPoints;
+                } catch (error) {
+                    console.error('Error fetching user points:', error);
+                }
+            }
+
+            initializeLiff();
+
+            const updateCartUI = () => {
+                cartItemsContainer.innerHTML = '';
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<p class="text-gray-600">Your cart is empty.</p>';
+                } else {
+                    cart.forEach((item, index) => {
+                        const cartItem = document.createElement('div');
+                        cartItem.classList.add('flex', 'justify-between', 'items-center', 'my-2');
+                        cartItem.innerHTML = `
+                            <span>${item.name} (${item.option})</span>
+                            <span>${item.price.toFixed(2)} บาท</span>
+                            <button class="ml-4 bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 remove-from-cart" data-index="${index}">
+                                ลบ
+                            </button>
+                        `;
+                        cartItemsContainer.appendChild(cartItem);
+                    });
+                }
+                let totalPrice = cart.reduce((total, item) => total + item.price, 0);
+                if (usePointsCheckbox.checked && userPoints >= 10) {
+                    totalPrice -= 35;
+                }
+                totalPriceElement.textContent = totalPrice.toFixed(2);
+
+                document.querySelectorAll('.remove-from-cart').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = e.target.getAttribute('data-index');
+                        cart.splice(index, 1);
+                        updateCartUI();
+                    });
+                });
+            };
+
+            const fetchProducts = async () => {
+                Swal.fire({
+                    title: 'กำลังโหลด',
+                    text: 'กรุณารอสักครู่...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                try {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycby0gTIdGa5wq38V2w2V1LRA_zb2bxT72YHGWfVsqnjXlQra06MWvuCnmk_fER0P9CuJ/exec');
+                    const products = await response.json();
+                    products.forEach(product => {
+                        const productElement = document.createElement('div');
+                        productElement.classList.add('bg-white', 'p-4', 'rounded-lg', 'shadow-lg', 'flex', 'items-center');
+                        productElement.setAttribute('data-id', product.id);
+                        productElement.setAttribute('data-image', product.image);
+                        productElement.setAttribute('data-name', product.name);
+                        productElement.setAttribute('data-price-hot', product.priceHot);
+                        productElement.setAttribute('data-price-cold', product.priceCold);
+
+                        const imageUrl = product.imageUrl || 'https://via.placeholder.com/100';
+
+                        productElement.innerHTML = `
+                            <img src="${product.image}" alt="Product" class="w-24 h-24 object-cover rounded-md">
+                            <div class="flex-grow ml-4">
+                                <h2 class="text-md font-semibold text-gray-900">${product.name}</h2>
+                                <p class="text-gray-600"><span class="product-price">${product.priceHot}</span> บาท</p>
+                                <div class="mt-2">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" class="form-radio" name="option-${product.id}" value="ร้อน" checked>
+                                        <span class="ml-2">ร้อน</span>
+                                    </label>
+                                    <label class="inline-flex items-center ml-4">
+                                        <input type="radio" class="form-radio" name="option-${product.id}" value="เย็น">
+                                        <span class="ml-2">เย็น</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="ml-auto text-white py-2 px-4 rounded focus:outline-none focus:ring-2 add-to-cart" style="background-color: #574040;">
+                                เลือก
+                            </button>
+                        `;
+
+                        productElement.querySelectorAll(`input[name="option-${product.id}"]`).forEach(radio => {
+                            radio.addEventListener('change', (e) => {
+                                const selectedOption = e.target.value;
+                                const priceElement = productElement.querySelector('.product-price');
+                                priceElement.textContent = selectedOption === 'ร้อน' ? product.priceHot : product.priceCold;
+                            });
+                        });
+
+                        productListContainer.appendChild(productElement);
+                    });
+
+                    document.querySelectorAll('.add-to-cart').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const productElement = e.target.closest('[data-id]');
+                            const productId = productElement.getAttribute('data-id');
+                            const productName = productElement.getAttribute('data-name');
+                            const selectedOption = productElement.querySelector(`input[name="option-${productId}"]:checked`).value;
+                            const productPrice = selectedOption === 'ร้อน'
+                                ? parseFloat(productElement.getAttribute('data-price-hot'))
+                                : parseFloat(productElement.getAttribute('data-price-cold'));
+
+                            const product = { id: productId, name: productName, option: selectedOption, price: productPrice };
+                            cart.push(product);
+                            updateCartUI();
+                        });
+                    });
+                    Swal.close();
+                } catch (error) {
+                    console.error('Error fetching products:', error);
+                    Swal.fire('Error', 'เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่.', 'error');
+                }
+            };
+
+            const sendCartData = async () => {
+                const buyerName = buyerNameInput.value.trim();
+                const lineUserId = lineUserIdInput.value.trim();
+                if (buyerName === '' || lineUserId === '') {
+                    alert('Please enter your name and LINE User ID.');
+                    return;
+                }
+
+                const confirmation = await Swal.fire({
+                    title: 'ยืนยันการสั่งซื้อ',
+                    text: "คุณแน่ใจหรือไม่ว่าต้องการสั่งซื้อ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, สั่งซื้อ!'
+                });
+
+                if (!confirmation.isConfirmed) {
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'กำลังส่งข้อมูล',
+                    text: 'กรุณารอสักครู่...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                try {
+                    const orderData = {
+                        buyerName,
+                        lineUserId,
+                        items: cart,
+                        usePoints: usePointsCheckbox.checked && userPoints >= 10
+                    };
+
+                    const response = await fetch('https://script.google.com/macros/s/AKfycby0gTIdGa5wq38V2w2V1LRA_zb2bxT72YHGWfVsqnjXlQra06MWvuCnmk_fER0P9CuJ/exec', {
+                        method: 'POST',
+                        body: JSON.stringify(orderData)
+                    });
+                    const responseData = await response.json();
+                    lastOrderId = responseData.orderId;
+
+                    Swal.fire('สำเร็จ!', 'คำสั่งซื้อของคุณถูกส่งเรียบร้อยแล้ว!', 'success');
+                    cart = [];
+                    updateCartUI();
+                    buyerNameInput.value = '';
+                    liff.closeWindow(); // Close the LIFF window
+
+                } catch (error) {
+                    console.error('Error sending order:', error);
+                    Swal.fire('Error', 'เกิดข้อผิดพลาดในการส่งคำสั่งซื้อ กรุณาลองใหม่.', 'error');
+                }
+            };
+
+            usePointsCheckbox.addEventListener('change', updateCartUI);
+            checkoutButton.addEventListener('click', sendCartData);
+
+            fetchProducts();
+        });
+    </script>
+</body>
+</html>
