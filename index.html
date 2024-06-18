@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ร้านกาแฟ</title>
+    <title>ร้านกาแฟcoffeshop</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -187,7 +187,7 @@
                 const buyerName = buyerNameInput.value.trim();
                 const lineUserId = lineUserIdInput.value.trim();
                 if (buyerName === '' || lineUserId === '') {
-                    alert('Please enter your name and LINE User ID.');
+                    Swal.fire('Error', 'กรุณากรอกชื่อและ LINE User ID.', 'error');
                     return;
                 }
 
