@@ -15,7 +15,7 @@
         </header>
 
         <div id="cart" class="my-4 p-4 bg-white rounded-lg shadow-md">
-            <input id="line-user-id" type="text" class="mt-4 p-2 text-center w-full bg-gray-100 border border-gray-100 rounded-full" placeholder="LINE User ID" readonly>
+            <input id="line-user-id" type="text" class="mt-4 p-2 text-center w-full bg-gray-100 border border-gray-100 rounded-full" placeholder="LINE User ID" >
 
             <div id="cart-items" class="mt-4 p-5 text-sm bg-green-50 rounded">
                 <p class="text-gray-600">เลือกรายการ </p>
@@ -31,18 +31,32 @@
             </div>
         </div>
 
+        <div id="points-container" class="my-4 p-4 bg-white rounded-lg shadow-md">
+            <div class="flex justify-between items-center">
+                <div><strong>แต้มสะสม: <span id="points">0</span> แต้ม</strong></div>
+                <button id="redeem-points" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    ใช้ 10 แต้ม
+                </button>
+            </div>
+        </div>
+
         <div id="product-list" class="grid grid-cols-1 gap-2 mt-2"></div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let cart = [];
+            let points = 0;
+            let discountApplied = false;
+
             const cartItemsContainer = document.getElementById('cart-items');
             const totalPriceElement = document.getElementById('total-price');
             const productListContainer = document.getElementById('product-list');
             const checkoutButton = document.getElementById('checkout');
             const buyerNameInput = document.getElementById('buyer-name');
             const lineUserIdInput = document.getElementById('line-user-id');
+            const pointsElement = document.getElementById('points');
+            const redeemPointsButton = document.getElementById('redeem-points');
             let lastOrderId = null;
 
             async function initializeLiff() {
@@ -80,7 +94,8 @@
                     });
                 }
                 const totalPrice = cart.reduce((total, item) => total + item.price, 0);
-                totalPriceElement.textContent = totalPrice.toFixed(2);
+                const finalPrice = discountApplied ? Math.max(totalPrice - 10, 0) : totalPrice;
+                totalPriceElement.textContent = finalPrice.toFixed(2);
 
                 document.querySelectorAll('.remove-from-cart').forEach(button => {
                     button.addEventListener('click', (e) => {
@@ -101,7 +116,7 @@
                     }
                 });
                 try {
-                    const response = await fetch('https://script.google.com/macros/s/AKfycby0gTIdGa5wq38V2w2V1LRA_zb2bxT72YHGWfVsqnjXlQra06MWvuCnmk_fER0P9CuJ/exec');
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbxBeVo23gWtV4iPOQQP3DEqSqnocbeUpYR3h1c81uRaFwekxzkr5L5NUXT4dIgEuqjTuQ/exec');
                     const products = await response.json();
                     products.forEach(product => {
                         const productElement = document.createElement('div');
@@ -206,12 +221,15 @@
                         items: cart
                     };
 
-                    const response = await fetch('https://script.google.com/macros/s/AKfycby0gTIdGa5wq38V2w2V1LRA_zb2bxT72YHGWfVsqnjXlQra06MWvuCnmk_fER0P9CuJ/exec', {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbxBeVo23gWtV4iPOQQP3DEqSqnocbeUpYR3h1c81uRaFwekxzkr5L5NUXT4dIgEuqjTuQ/exec', {
                         method: 'POST',
                         body: JSON.stringify(orderData)
                     });
                     const responseData = await response.json();
                     lastOrderId = responseData.orderId;
+
+                    points += cart.length;
+                    pointsElement.textContent = points;
 
                     Swal.fire('สำเร็จ!', 'คำสั่งซื้อของคุณถูกส่งเรียบร้อยแล้ว!', 'success');
                     cart = [];
@@ -225,7 +243,19 @@
                 }
             };
 
+            const redeemPoints = () => {
+                if (points >= 10) {
+                    points -= 10;
+                    discountApplied = true;
+                    pointsElement.textContent = points;
+                    updateCartUI();
+                } else {
+                    Swal.fire('Error', 'คุณมีแต้มสะสมไม่เพียงพอ.', 'error');
+                }
+            };
+
             checkoutButton.addEventListener('click', sendCartData);
+            redeemPointsButton.addEventListener('click', redeemPoints);
 
             fetchProducts();
         });
