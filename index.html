@@ -125,26 +125,28 @@
                     <div id="loading-icon"></div>
                     <div>กำลังค้นหาข้อมูล...</div>
                 </div>
-
                 <div id="form-container">
                     <div class="mb-4">
                         <label for="username" class="block text-gray-700">ชื่อ:</label>
-                        <input type="text" id="username" placeholder="Name"
-                            class="block w-full mb-2 p-2 border rounded" />
+                        <input type="text" id="username" placeholder="Name" class="block w-full mb-2 p-2 border rounded" />
                     </div>
                     <div class="mb-4">
                         <label for="contact" class="block text-gray-700">เบอร์ติดต่อ:</label>
-                        <input type="text" id="contact" placeholder="Contact"
-                            class="block w-full mb-2 p-2 border rounded" />
+                        <input type="text" id="contact" placeholder="Contact" class="block w-full mb-2 p-2 border rounded" />
                     </div>
                     <div class="mb-4">
                         <label for="address" class="block text-gray-700">ที่อยู่:</label>
-                        <textarea id="address" placeholder="Address"
-                            class="block w-full mb-2 p-2 border rounded"></textarea>
+                        <textarea id="address" placeholder="Address" class="block w-full mb-2 p-2 border rounded"></textarea>
                     </div>
-
+                
+                    <div class="mb-4">
+                        <input type="checkbox" id="save-info" class="mr-2">
+                        <label for="save-info" class="text-gray-700">บันทึกชื่อและที่อยู่สำหรับการใช้งานครั้งถัดไป</label>
+                    </div>
+                
                     <input type="hidden" id="userlineid" />
                 </div>
+                
                 <button type="submit" class="bg-pink-900 text-white p-4 w-full rounded-3xl mt-4">สั่งซื้อสินค้า</button>
             </form>
         </div>
