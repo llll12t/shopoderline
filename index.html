@@ -475,24 +475,29 @@
             cartView.classList.remove('hidden');
         }
 
+        shippingForm.addEventListener('submit', handleShippingFormSubmit);
+
         function handleShippingFormSubmit(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const address = document.getElementById('address').value;
-            const contact = document.getElementById('contact').value;
-            const userlineid = document.getElementById('userlineid').value;
-            const order = {
-                username,
-                address,
-                contact,
-                userlineid,
-                items: cart,
-                total: cart.reduce((total, item) => total + (item.Price * item.quantity), 0)
-            };
-            currentOrder = order;
-            orderDetailsContent.innerHTML = renderOrderDetails(order);
-            orderDetailsModal.classList.remove('hidden');
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const address = document.getElementById('address').value;
+        const contact = document.getElementById('contact').value;
+        const userlineid = document.getElementById('userlineid').value;
+        const saveInfo = document.getElementById('save-info').checked; // Get the checkbox status
+        const order = {
+            username,
+            address,
+            contact,
+            userlineid,
+            items: cart,
+            total: cart.reduce((total, item) => total + (item.Price * item.quantity), 0),
+            saveInfo // Include the saveInfo in the order data
+        };
+        currentOrder = order;
+        orderDetailsContent.innerHTML = renderOrderDetails(order);
+        orderDetailsModal.classList.remove('hidden');
         }
+
 
         function renderOrderDetails(order) {
             const itemsHtml = order.items.map(item => `
