@@ -245,7 +245,6 @@
                             <div style="flex: 1; padding-left: 10px;">
                                 <p><strong>ไซต์:</strong> ${product.size}</p>
                                 <p><strong>จำนวน:</strong> ${product.totalOrder} ชิ้น</p>
-
                             </div>
                         </div>
                     </div>`;
@@ -256,9 +255,6 @@
                 </div>
                 <div style="margin-top: 10px; font-size:14px; text-align: start;">
                     <strong>เวลาสั่งซื้อ:</strong> ${formatDate(order.timestamp)}
-                </div>
-                 <div style="margin-top: 10px; font-size:14px; text-align: start;">
-                    <strong>เวลาสั่งจัดส่ง:</strong> ${formatDate(product.express)}
                 </div>`;
             Swal.fire({ title: `<div class="text-sm">รายละเอียดบิล Order ${orderId}</div>`, html: productDetails, confirmButtonText: 'ปิด' });
         }
