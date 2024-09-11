@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>อัปโหลดใบเสร็จ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+
+<body style="font-family: Noto Sans Thai;">
+    <div class="h-screen bg-slate-100 flex justify-center items-center">
+        <div class="max-w-md mx-auto px-4 py-4">
+            <form id="uploadForm">
+                <div class="relative p-4 rounded-lg   mx-auto">
+                    <div class="text-center">
+                        <div class="mx-auto text-slate-800 text-lg text-center mt-1">
+                            แจ้งชำระเงิน
+                        </div>
+                        <div class="mx-auto w-32 h-32 rounded-md relative m-4 shadow-inset">
+                            <img src="https://images.squarespace-cdn.com/content/v1/59bf8dc3e5dd5b141a2ba135/1631535919888-3XYMEBVRFIZ1HZ337LSA/Page365+%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84%E0%B8%AA%E0%B8%A5%E0%B8%B4%E0%B8%9B%E0%B9%82%E0%B8%AD%E0%B8%99%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99%E0%B8%AD%E0%B8%B1%E0%B8%95%E0%B9%82%E0%B8%99%E0%B8%A1%E0%B8%B1%E0%B8%95%E0%B8%B4.png"
+                                alt="Default Image" id="preview" class="object-cover w-full border rounded-lg ">
+                        </div>
+                        <label for="file"
+                            class="cursor-pointer inline-flex justify-between items-center py-2 px-4 rounded-lg text-md text-left text-black bg-lime-200 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="inline-flex flex-shrink-0 w-6 h-6 -mt-1 mr-1"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                                <path
+                                    d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
+                                <circle cx="12" cy="13" r="3" />
+                            </svg>
+                            อัพโหลดใบเสร็จ
+                            <input type="file" id="file" name="file" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+                    <div class="bg-rose-50 text-rose-500 rounded-lg text-md p-2 mt-2">
+                        สลิปจากธนาคารกรุงเทพ<br>
+                        กรุณารอการตรวจสอบสลิปหลังการโอนประมาณ 7- 10 นาที
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+
+<script>
+    // ฟังก์ชันที่ถูกเรียกเมื่อโหลดหน้าเว็บเสร็จ
+    window.onload = function () {
+        displayFormData();
+    };
+
+    // ฟังก์ชันเพื่อแสดงข้อมูลที่มากับ URL
+    function displayFormData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const liffState = urlParams.get('liff.state');
+        if (liffState) {
+            const decodedLiffState = decodeURIComponent(liffState);
+            const nestedParams = new URLSearchParams(decodedLiffState);
+
+            const orderId = nestedParams.get('orderId');
+            const totalOrder = nestedParams.get('totalOrder');
+            const username = nestedParams.get('username');
+            const userlineid = nestedParams.get('userlineid');
+
+            // ตั้งค่า input ที่ซ่อนอยู่ในฟอร์มด้วยข้อมูลที่ดึงมา
+            document.getElementById('uploadForm').orderId = orderId;
+            document.getElementById('uploadForm').totalOrder = totalOrder;
+            document.getElementById('uploadForm').username = username;
+            document.getElementById('uploadForm').userlineid = userlineid;
+        }
+    }
+
+    let url = "https://script.google.com/macros/s/AKfycbyRSiCXY-4Z-mAtLiEK3N1hrMI3I3TUtitUChsSi6JX9ct0IYKZo0XXkZe_Dc2UX9kv/exec"; // เปลี่ยนเป็น URL ของสคริปต์ที่ใช้งานจริง
+    let fileInput = document.getElementById("file");
+    let imgPreview = document.getElementById("preview");
+
+    // ฟังก์ชันเพื่อแปลงไฟล์เป็น base64
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // ฟังก์ชันเพื่อแสดงตัวอย่างภาพที่เลือก
+    function previewImage() {
+        if (fileInput.files.length > 0) {
+            let file = fileInput.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                imgPreview.src = e.target.result;
+                submitData(file);
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            imgPreview.src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+        }
+    }
+
+    // ฟังก์ชันเพื่อส่งข้อมูล
+    async function submitData(file) {
+        const isConfirmed = await showConfirmationDialog();
+
+        if (isConfirmed) {
+            try {
+                let base64 = await getBase64(file);
+                imgPreview.src = `data:${file.type};base64,${base64}`;
+
+                const formData = document.getElementById('uploadForm');
+                let obj = {
+                    base64: base64,
+                    type: file.type,
+                    name: file.name,
+                    orderId: formData.orderId,
+                    userlineId: formData.userlineid,
+                    totalOrder: formData.totalOrder,
+                    customerName: formData.username
+                };
+
+                Swal.fire({
+                    title: 'กำลังบันทึก, กรุณารอสักครู่...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    html: '<div class="swal2-loading text-md"></div>',
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                let response = await fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(obj)
+                });
+
+                let data = await response.text();
+
+                Swal.fire({
+                    title: 'สำเร็จ!',
+                    text: 'อัปโหลดใบเสร็จเรียบร้อยแล้ว!',
+                    icon: 'success',
+                    confirmButtonText: 'ปิด',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        liff.closeWindow();
+                    }
+                });
+                console.log(data);
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ข้อผิดพลาด',
+                    text: 'เกิดข้อผิดพลาดขณะส่งข้อมูล',
+                });
+
+                console.error(error);
+            }
+        } else {
+            Swal.fire('ยกเลิกการส่งข้อมูล', 'ข้อมูลของคุณยังไม่ถูกส่ง', 'info');
+        }
+    }
+
+    // ตั้งค่าการเปลี่ยนแปลงเมื่อมีการเลือกไฟล์ใหม่
+    fileInput.addEventListener('change', () => {
+        previewImage();
+    });
+
+    // แสดงกล่องยืนยันก่อนส่งข้อมูล
+    async function showConfirmationDialog() {
+        const confirmation = await Swal.fire({
+            title: 'ยืนยันการส่งข้อมูล',
+            text: 'คุณแน่ใจหรือว่าต้องการส่งข้อมูลนี้?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'ใช่, ส่งข้อมูล!',
+            cancelButtonText: 'ไม่, ยกเลิก'
+        });
+
+        return confirmation.isConfirmed;
+    }
+
+</script>
+</html>
