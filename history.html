@@ -152,7 +152,7 @@
                     orderMap[orderId].totalPrice += +totalPrice;
                 }
 
-                orderMap[orderId].products.push({ productId: row[6], product: row[7], price: row[8], size: row[9], value: row[10], totalOrder: +totalOrder });
+                orderMap[orderId].products.push({ productId: row[6], product: row[7], price: row[8], size: row[9], value: row[10],express: row[12], totalOrder: +totalOrder });
             });
             return Object.values(orderMap);
         }
@@ -250,6 +250,8 @@
                             <div style="flex: 1; padding-left: 10px;">
                                 <p><strong>ไซต์:</strong> ${product.size}</p>
                                 <p><strong>จำนวน:</strong> ${product.totalOrder} ชิ้น</p>
+                                <p><strong>จำนวน:</strong> ${product.express} </p>
+
                             </div>
                         </div>
                     </div>`;
