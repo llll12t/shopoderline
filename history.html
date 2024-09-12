@@ -116,22 +116,42 @@
         }
 
         function processOrders(data) {
-            const orderMap = {};
-            data.forEach(row => {
-                const [orderId, name, address, contact, note, userId, , , , , totalOrder, totalPrice, rawTimestamp] = row;
-                const timestamp = new Date(rawTimestamp);
+    const orderMap = {};
+    data.forEach(row => {
+        const [orderId, name, address, contact, note, userId, , , , , totalOrder, totalPrice, rawTimestamp, paymentStatus] = row;
+        const timestamp = new Date(rawTimestamp);
 
-                if (!orderMap[orderId]) {
-                    orderMap[orderId] = { orderId, userId, name, address, contact,note, totalOrder: +totalOrder, totalPrice: +totalPrice, timestamp, products: [] };
-                } else {
-                    orderMap[orderId].totalOrder += +totalOrder;
-                    orderMap[orderId].totalPrice += +totalPrice;
-                }
-
-                orderMap[orderId].products.push({ productId: row[6], product: row[7], price: row[8], size: row[9], value: row[10],express: row[12], totalOrder: +totalOrder });
-            });
-            return Object.values(orderMap);
+        if (!orderMap[orderId]) {
+            orderMap[orderId] = { 
+                orderId, 
+                userId, 
+                name, 
+                address, 
+                contact, 
+                note, 
+                totalOrder: +totalOrder, 
+                totalPrice: +totalPrice, 
+                timestamp, 
+                paymentStatus, // เพิ่มสถานะการชำระเงิน
+                products: [] 
+            };
+        } else {
+            orderMap[orderId].totalOrder += +totalOrder;
+            orderMap[orderId].totalPrice += +totalPrice;
         }
+
+        orderMap[orderId].products.push({ 
+            productId: row[6], 
+            product: row[7], 
+            price: row[8], 
+            size: row[9], 
+            value: row[10], 
+            express: row[12], 
+            totalOrder: +totalOrder 
+        });
+    });
+    return Object.values(orderMap);
+}
 
         function applyFilters() {
             filteredData.sort((a, b) => b.timestamp - a.timestamp);
