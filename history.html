@@ -177,10 +177,15 @@
             paymentIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                           </svg>`; // ไอคอนเครื่องหมายถูก
+        } else if (order.paymentStatus === 'กำลังตรวจสอบ') {
+            paymentIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                          </svg>`; // ไอคอนนาฬิกาสำหรับสถานะกำลังตรวจสอบ
         } else {
             paymentIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                          </svg>`; // ไอคอนเครื่องหมายกากบาท
+                          </svg>`; // ไอคอนเครื่องหมายกากบาทสำหรับการชำระเงินไม่สำเร็จ
         }
 
         tableBody.insertAdjacentHTML('beforeend', `
