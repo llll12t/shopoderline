@@ -514,7 +514,7 @@
         // ฟังก์ชันสำหรับแสดงสินค้าด้วย HTML
         function createProductHtml(product) {
             let sizeOptions = ''; // ค่าเริ่มต้นเป็น "เลือกไซต์"
-            const sizeKeys = ['มีสินค้า'];
+            const sizeKeys = ['available'];
 
             sizeKeys.forEach(size => {
                 if (product[size] > 0) {
