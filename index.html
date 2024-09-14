@@ -128,7 +128,9 @@
 
             <div class="pt-4">
                 <div class="flex justify-between items-center mb-4">
-                    <label for="shipping-options" class="text-sm">เลือกวิธีการจัดส่ง</label>
+                    <label for="shipping-options" class="text-sm">เลือกวิธีการจัดส่ง <span class="text-green-600 text-xs" style="float: inline-start;">ส่งฟรีเมื่อยอดซื้อครบ 500 บาท</span></label>
+                    
+
                     <select id="shipping-options" class="bg-white border border-gray-400 rounded-lg p-2">
                         <option value="A00000">ธรรมดา (30 บาท)</option>
                         <option value="A00001">ด่วน (50 บาท)</option>
@@ -179,12 +181,12 @@
                     <div class="mb-4">
                         <label for="username" class="block text-gray-700">ชื่อ:</label>
                         <input type="text" id="username" placeholder="Name"
-                            class="block w-full mb-2 p-2 border rounded-lg" required />
+                            class="block w-full mb-2 p-2 border rounded-lg" required/>
                     </div>
                     <div class="mb-4">
                         <label for="contact" class="block text-gray-700">เบอร์ติดต่อ:</label>
                         <input type="text" id="contact" placeholder="Contact"
-                            class="block w-full mb-2 p-2 border rounded-lg" required />
+                            class="block w-full mb-2 p-2 border rounded-lg" required/>
                     </div>
                     <div class="mb-4">
                         <label for="address" class="block text-gray-700">ที่อยู่:</label>
@@ -312,36 +314,36 @@
 
 
         function checkForFreeShipping() {
-            const productTotal = cart.reduce((total, item) => total + (item.Price * item.quantity), 0);
-            const shippingDropdown = document.getElementById('shipping-options');
-            const freeShippingOption = shippingOptions.find(option => option.id === 'A00003'); // ตัวเลือกส่งฟรี
+    const productTotal = cart.reduce((total, item) => total + (item.Price * item.quantity), 0);
+    const shippingDropdown = document.getElementById('shipping-options');
+    const freeShippingOption = shippingOptions.find(option => option.id === 'A00003'); // ตัวเลือกส่งฟรี
 
-            if (productTotal >= 500) {
-                // เปลี่ยนเป็นการจัดส่งฟรีโดยอัตโนมัติ
-                selectedShipping = freeShippingOption;
+    if (productTotal >= 500) {
+        // เปลี่ยนเป็นการจัดส่งฟรีโดยอัตโนมัติ
+        selectedShipping = freeShippingOption;
 
-                // อัปเดต dropdown ให้แสดง 'ส่งฟรี'
-                shippingDropdown.value = 'A00003';
+        // อัปเดต dropdown ให้แสดง 'ส่งฟรี'
+        shippingDropdown.value = 'A00003';
 
-                // ซ่อนตัวเลือกอื่น
-                Array.from(shippingDropdown.options).forEach(option => {
-                    if (option.value !== 'A00003') {
-                        option.style.display = 'none';
-                    }
-                });
-            } else {
-                // แสดงตัวเลือกอื่นๆ
-                Array.from(shippingDropdown.options).forEach(option => {
-                    option.style.display = 'block';
-                });
-
-                // ตั้งค่ากลับเป็นตัวเลือกเริ่มต้นหากยอดไม่ถึง 500
-                selectedShipping = shippingOptions[0];
-                shippingDropdown.value = selectedShipping.id;
+        // ซ่อนตัวเลือกอื่น
+        Array.from(shippingDropdown.options).forEach(option => {
+            if (option.value !== 'A00003') {
+                option.style.display = 'none';
             }
+        });
+    } else {
+        // แสดงตัวเลือกอื่นๆ
+        Array.from(shippingDropdown.options).forEach(option => {
+            option.style.display = 'block';
+        });
 
-            updateTotalPrice(); // อัปเดตราคารวมใหม่หลังจากเปลี่ยนการจัดส่ง
-        }
+        // ตั้งค่ากลับเป็นตัวเลือกเริ่มต้นหากยอดไม่ถึง 500
+        selectedShipping = shippingOptions[0];
+        shippingDropdown.value = selectedShipping.id;
+    }
+
+    updateTotalPrice(); // อัปเดตราคารวมใหม่หลังจากเปลี่ยนการจัดส่ง
+}
 
 
 
@@ -353,7 +355,7 @@
 
             fetchProducts(); // ดึงข้อมูลสินค้า
         };
-
+   
 
         // ฟังก์ชันเริ่มต้นการใช้งาน LIFF
         async function initializeLiff() {
@@ -495,7 +497,6 @@
                 }
 
                 localStorage.setItem('products', JSON.stringify(products)); // เก็บข้อมูลสินค้าใน localStorage
-                currentTab = getFirstCategory(products); // กำหนดหมวดหมู่เริ่มต้นเป็นหมวดแรก
                 renderProducts(products); // แสดงสินค้าบนหน้าเว็บ
                 renderTabs(products); // แสดงหมวดหมู่
             } catch (error) {
@@ -511,44 +512,44 @@
             return categories[0]; // หมวดหมู่แรกเป็นหมวดหมู่เริ่มต้น
         }
 
-        // ฟังก์ชันแสดงแท็บหมวดหมู่สินค้า
-        function renderTabs(products) {
-            tabNav.innerHTML = ''; // เคลียร์แท็บเดิม
-            let categories = [...new Set(products.map(product => product.category || 'Uncategorized'))];
+// ฟังก์ชันแสดงแท็บหมวดหมู่สินค้า
+function renderTabs(products) {
+    tabNav.innerHTML = ''; // เคลียร์แท็บเดิม
+    let categories = [...new Set(products.map(product => product.category || 'Uncategorized'))];
+    
+    // ใส่หมวดหมู่ 'All' ไว้เป็นตัวเลือกแรกเสมอ
+    categories = ['All', ...categories.filter(category => category !== 'All')];
 
-            // ใส่หมวดหมู่ 'All' ไว้เป็นตัวเลือกแรกเสมอ
-            categories = ['All', ...categories.filter(category => category !== 'All')];
+    const tabContainer = document.createElement('div');
+    tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto', 'py-2');
 
-            const tabContainer = document.createElement('div');
-            tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto', 'py-2');
+    categories.forEach(category => {
+        const tabButton = document.createElement('button');
+        tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'border', 'border-yellow-400', 'items-center', 'justify-start', 'space-x-2');
 
-            categories.forEach(category => {
-                const tabButton = document.createElement('button');
-                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'border', 'border-yellow-400', 'items-center', 'justify-start', 'space-x-2');
-
-                // ตรวจสอบให้ 'All' ถูกทำเป็น active หาก currentTab เป็น 'All'
-                if (category === 'All' && currentTab === 'All') {
-                    tabButton.classList.add('active', 'bg-yellow-200', 'text-black');
-                }
-
-                const categoryImage = document.createElement('img');
-                categoryImage.src = getCategoryImage(category, products); // ดึงรูปหมวดหมู่
-                categoryImage.alt = category;
-                categoryImage.classList.add('w-12', 'h-12', 'rounded-lg');
-
-                const categoryLabel = document.createElement('span');
-                categoryLabel.textContent = category === 'All' ? 'รวมทั้งหมด' : category; // เปลี่ยนชื่อเป็น "รวมทั้งหมด"
-                categoryLabel.classList.add('text-sm');
-
-                tabButton.appendChild(categoryImage);
-                tabButton.appendChild(categoryLabel);
-                tabButton.addEventListener('click', () => switchTab(category)); // เมื่อคลิกเปลี่ยนหมวดหมู่
-
-                tabContainer.appendChild(tabButton);
-            });
-
-            tabNav.appendChild(tabContainer); // เพิ่มแท็บหมวดหมู่ลงในหน้าเว็บ
+        // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
+        if (category === currentTab) {
+            tabButton.classList.add('active', 'bg-yellow-200', 'text-black');
         }
+
+        const categoryImage = document.createElement('img');
+        categoryImage.src = getCategoryImage(category, products); // ดึงรูปหมวดหมู่
+        categoryImage.alt = category;
+        categoryImage.classList.add('w-12', 'h-12', 'rounded-lg');
+
+        const categoryLabel = document.createElement('span');
+        categoryLabel.textContent = category === 'All' ? 'รวมทั้งหมด' : category; // เปลี่ยนชื่อเป็น "รวมทั้งหมด"
+        categoryLabel.classList.add('text-sm');
+
+        tabButton.appendChild(categoryImage);
+        tabButton.appendChild(categoryLabel);
+        tabButton.addEventListener('click', () => switchTab(category)); // เมื่อคลิกเปลี่ยนหมวดหมู่
+
+        tabContainer.appendChild(tabButton);
+    });
+
+    tabNav.appendChild(tabContainer); // เพิ่มแท็บหมวดหมู่ลงในหน้าเว็บ
+}
 
 
         // ฟังก์ชันดึงรูปหมวดหมู่สินค้า
@@ -560,8 +561,6 @@
             return product ? product['img-product'] : 'https://via.placeholder.com/40?text=Other'; // รูป Placeholder สำหรับหมวดหมู่อื่นๆ
         }
 
-
-
         // ฟังก์ชันเปลี่ยนหมวดหมู่สินค้า
         function switchTab(category) {
             currentTab = category; // เปลี่ยนหมวดหมู่ปัจจุบัน
@@ -570,7 +569,6 @@
             renderProducts(products); // แสดงสินค้าตามหมวดหมู่ที่เลือก
             renderTabs(products); // แสดงแท็บใหม่
         }
-
 
         // ฟังก์ชันแสดงสินค้าตามหมวดหมู่
         function renderProducts(products) {
@@ -608,7 +606,6 @@
                 loadMoreContainer.classList.add('hidden'); // ซ่อนปุ่ม "เพิ่มเติม" หากไม่มีสินค้าเพิ่ม
             }
         }
-
 
         // ฟังก์ชันสำหรับแสดงสินค้าด้วย HTML
         function createProductHtml(product) {
@@ -708,11 +705,7 @@
         </svg> ${cartCount}`;
         }
 
-        // ฟังก์ชันเพื่อลบค่าจัดส่งเดิมออกจากตะกร้า
-        function resetShippingCost() {
-            // ลบค่าจัดส่งเก่าออกจากตะกร้า
-            cart = cart.filter(item => item.id !== selectedShipping.id); // ลบค่าจัดส่งที่มี id เดียวกันออก
-        }
+      
 
         // ฟังก์ชันเพื่อตรวจสอบและเพิ่มค่าจัดส่งใหม่เมื่อแสดงตะกร้า
         function addShippingCost() {
@@ -725,12 +718,19 @@
             }
         }
 
-        // เมื่อย้อนกลับไปยังหน้าร้านค้า ให้รีเซ็ตค่าจัดส่ง
-        backToProductsBtn.addEventListener('click', () => {
-            resetShippingCost(); // รีเซ็ตค่าจัดส่งออกจากตะกร้า
-            cartView.classList.add('hidden');
-            productSelection.classList.remove('hidden');
-        });
+       // เมื่อย้อนกลับไปยังหน้าร้านค้า ให้รีเซ็ตค่าจัดส่ง
+            backToProductsBtn.addEventListener('click', () => {
+                resetShippingCost(); // รีเซ็ตค่าจัดส่งออกจากตะกร้า
+                selectedShipping = shippingOptions[0]; // ตั้งค่าจัดส่งกลับเป็นค่าจัดส่งเริ่มต้น
+                document.getElementById('shipping-options').value = selectedShipping.id; // ตั้งค่า dropdown เป็นค่าจัดส่งเริ่มต้น
+                cartView.classList.add('hidden');
+                productSelection.classList.remove('hidden');
+            });
+            // ฟังก์ชันเพื่อลบค่าจัดส่งเดิมออกจากตะกร้า
+function resetShippingCost() {
+    // ลบค่าจัดส่งเก่าออกจากตะกร้า
+    cart = cart.filter(item => !shippingOptions.some(option => option.id === item.id)); // ลบค่าจัดส่งออก
+}
         // เรียกใช้เมื่อแสดงตะกร้า
         function showCart() {
             productSelection.classList.add('hidden');
@@ -817,22 +817,22 @@
 
 
         // ฟังก์ชันแสดงหรือซ่อนตัวเลือกการส่งฟรี
-        function toggleFreeShippingOption() {
-            const productTotal = cart.reduce((total, item) => total + (item.Price * item.quantity), 0); // คำนวณราคารวมสินค้า
-            const freeShippingOption = document.querySelector('option[value="A00003"]'); // ตัวเลือกส่งฟรี
+            function toggleFreeShippingOption() {
+                const productTotal = cart.reduce((total, item) => total + (item.Price * item.quantity), 0); // คำนวณราคารวมสินค้า
+                const freeShippingOption = document.querySelector('option[value="A00003"]'); // ตัวเลือกส่งฟรี
 
-            if (productTotal >= 500) {
-                freeShippingOption.style.display = 'block'; // แสดงตัวเลือกส่งฟรี
-            } else {
-                freeShippingOption.style.display = 'none'; // ซ่อนตัวเลือกส่งฟรี
-                if (selectedShipping.id === 'A00003') {
-                    // หากเลือกส่งฟรีไว้แล้ว แต่ยอดไม่ถึง 500 ให้รีเซ็ตการเลือกจัดส่ง
-                    selectedShipping = shippingOptions[0]; // เปลี่ยนกลับเป็นค่าจัดส่งธรรมดา
+                if (productTotal >= 500) {
+                    freeShippingOption.style.display = 'block'; // แสดงตัวเลือกส่งฟรี
+                } else {
+                    freeShippingOption.style.display = 'none'; // ซ่อนตัวเลือกส่งฟรี
+                    if (selectedShipping.id === 'A00003') {
+                        // หากเลือกส่งฟรีไว้แล้ว แต่ยอดไม่ถึง 500 ให้รีเซ็ตการเลือกจัดส่ง
+                        selectedShipping = shippingOptions[0]; // เปลี่ยนกลับเป็นค่าจัดส่งธรรมดา
+                    }
                 }
-            }
 
-            updateTotalPrice(); // อัปเดตราคารวมใหม่
-        }
+                updateTotalPrice(); // อัปเดตราคารวมใหม่
+            }
 
 
 
@@ -942,6 +942,9 @@
         shippingForm.addEventListener('submit', handleShippingFormSubmit); // ส่งข้อมูลจัดส่ง
         confirmOrderBtn.addEventListener('click', async () => {
             await saveOrder(currentOrder); // บันทึกคำสั่งซื้อ
+            // ส่งข้อความแจ้งเตือนทาง LINE เมื่อบันทึกสำเร็จ
+            await sendTextMessage();
+
             cart = []; // เคลียร์ตะกร้าหลังบันทึก
             updateCartCount(); // อัปเดตจำนวนสินค้าในตะกร้า
             shippingInfo.classList.add('hidden'); // ซ่อนหน้าการจัดส่ง
@@ -953,7 +956,26 @@
         closeModalBtn.addEventListener('click', () => {
             orderDetailsModal.classList.add('hidden'); // ซ่อน modal เมื่อคลิกปุ่มปิด
         });
+        async function sendTextMessage() {
+            try {
+                // ตรวจสอบว่ามีการล็อกอินใน LIFF แล้วหรือไม่
+                if (!liff.isLoggedIn()) {
+                    liff.login(); // ถ้ายังไม่ได้ล็อกอิน ให้ทำการล็อกอิน
+                    return;
+                }
 
+                // ส่งข้อความ text ผ่าน LIFF SDK
+                await liff.sendMessages([
+                    {
+                        'type': 'text',
+                        'text': `คำสั่งซื้อของคุณสำเร็จแล้ว`
+                    }
+                ]);
+                console.log('Message sent successfully');
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        }
 
     </script>
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
