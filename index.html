@@ -575,29 +575,30 @@
             tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto', 'py-2');
 
             categories.forEach(category => {
-                const tabButton = document.createElement('button');
-                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'items-center', 'justify-start', 'space-x-2');
+            const tabButton = document.createElement('button');
+            tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'border', 'border-yellow-400', 'items-center', 'justify-start', 'space-x-2');
 
-                // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
-                if (category === currentTab) {
-                    tabButton.classList.add('active', 'bg-lime-200', 'text-black');
-                }
+            // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
+            if (category === currentTab) {
+                tabButton.classList.add('active', 'bg-yellow-200', 'text-black');
+            }
 
-                const categoryImage = document.createElement('img');
-                categoryImage.src = getCategoryImage(category, products); // ดึงรูปหมวดหมู่
-                categoryImage.alt = category;
-                categoryImage.classList.add('w-12', 'h-12', 'rounded-lg');
+            const categoryImage = document.createElement('img');
+            categoryImage.src = getCategoryImage(category, products); // ดึงรูปหมวดหมู่
+            categoryImage.alt = category;
+            categoryImage.classList.add('w-12', 'h-12', 'rounded-lg');
 
-                const categoryLabel = document.createElement('span');
-                categoryLabel.textContent = category === 'All' ? 'รวมทั้งหมด' : category; // เปลี่ยนชื่อเป็น "รวมทั้งหมด"
-                categoryLabel.classList.add('text-sm');
+            const categoryLabel = document.createElement('span');
+            categoryLabel.textContent = category === 'All' ? 'รวมทั้งหมด' : category; // เปลี่ยนชื่อเป็น "รวมทั้งหมด"
+            categoryLabel.classList.add('text-sm');
 
-                tabButton.appendChild(categoryImage);
-                tabButton.appendChild(categoryLabel);
-                tabButton.addEventListener('click', () => switchTab(category)); // เมื่อคลิกเปลี่ยนหมวดหมู่
+            tabButton.appendChild(categoryImage);
+            tabButton.appendChild(categoryLabel);
+            tabButton.addEventListener('click', () => switchTab(category)); // เมื่อคลิกเปลี่ยนหมวดหมู่
 
-                tabContainer.appendChild(tabButton);
-            });
+            tabContainer.appendChild(tabButton);
+        });
+
 
             tabNav.appendChild(tabContainer); // เพิ่มแท็บหมวดหมู่ลงในหน้าเว็บ
         }
@@ -614,12 +615,17 @@
 
         // ฟังก์ชันเปลี่ยนหมวดหมู่สินค้า
         function switchTab(category) {
-            currentTab = category; // เปลี่ยนหมวดหมู่ปัจจุบัน
-            currentPage = 0;
-            const products = JSON.parse(localStorage.getItem('products'));
-            renderProducts(products); // แสดงสินค้าตามหมวดหมู่ที่เลือก
-            renderTabs(products); // แสดงแท็บใหม่
-        }
+          currentTab = category; // เปลี่ยนหมวดหมู่ปัจจุบัน
+          currentPage = 0; // รีเซ็ตหน้าปัจจุบัน
+          const products = JSON.parse(localStorage.getItem('products')); // ดึงสินค้าจาก localStorage
+          const filteredProducts = category === 'All'
+              ? products
+              : products.filter(product => product.category === category); // กรองสินค้าตามหมวดหมู่
+
+          renderProducts(filteredProducts); // แสดงสินค้าตามหมวดหมู่
+          renderTabs(products); // แสดงแท็บใหม่
+      }
+
 
         // ฟังก์ชันแสดงสินค้าตามหมวดหมู่หรือการค้นหา
         function renderProducts(products) {
@@ -696,55 +702,55 @@
 
         // ฟังก์ชันเพิ่มสินค้าลงตะกร้า
         function addToCart(event) {
-            const productId = event.target.dataset.id;
-            const products = JSON.parse(localStorage.getItem('products'));
-            const product = products.find(p => p.id === productId);
+    const productId = event.target.dataset.id;
+    const products = JSON.parse(localStorage.getItem('products'));
+    const product = products.find(p => p.id === productId);
 
-            if (!product) {
-                console.error(`Product with ID ${productId} not found.`); // หากไม่พบสินค้าตาม ID
-                return;
-            }
+    if (!product) {
+        console.error(`Product with ID ${productId} not found.`);
+        return;
+    }
 
-            const sizeElement = document.querySelector(`.product-size[data-id="${productId}"]`);
-            if (!sizeElement) {
-                console.error(`Size element not found for product ID: ${productId}`); // หากไม่พบข้อมูลขนาดสินค้า
-                return;
-            }
+    const sizeElement = document.querySelector(`.product-size[data-id="${productId}"]`);
+    if (!sizeElement) {
+        console.error(`Size element not found for product ID: ${productId}`);
+        return;
+    }
 
-            const size = sizeElement.value.split(' ')[0]; // ดึงขนาดจาก dropdown
-            if (!size) {
-                sizeElement.style.border = "2px solid red"; // เปลี่ยน border ของ dropdown เป็นสีแดงเมื่อไม่ได้เลือกไซต์
-                return;
-            }
+    const size = sizeElement.value.split(' ')[0];
+    if (!size) {
+        sizeElement.style.border = "2px solid red";
+        return;
+    }
 
-            sizeElement.style.border = ""; // รีเซ็ต border กลับเป็นปกติ
+    sizeElement.style.border = ""; // Reset border
 
-            const quantity = 1; // กำหนดค่าเริ่มต้นจำนวนเป็น 1
+    const quantity = 1; // กำหนดค่าเริ่มต้นเป็น 1
 
-            if (product[size] < quantity) {
-                alert('สินค้าในขนาดนี้หมดแล้ว'); // หากสินค้าหมด
-                return;
-            }
+    if (product[size] < quantity) {
+        alert('สินค้าในขนาดนี้หมดแล้ว');
+        return;
+    }
 
-            product[size] -= quantity; // ลดจำนวนสินค้าใน stock
+    product[size] -= quantity;
 
-            const productInCart = cart.find(item => item.id === productId && item.size === size);
-            if (productInCart) {
-                productInCart.quantity += quantity; // หากสินค้ามีอยู่ในตะกร้าแล้ว ให้เพิ่มจำนวน
-            } else {
-                cart.push({ ...product, size, quantity }); // หากไม่มี ให้เพิ่มสินค้าลงในตะกร้า
-            }
+    const productInCart = cart.find(item => item.id === productId && item.size === size);
+    if (productInCart) {
+        productInCart.quantity += quantity; // เพิ่มจำนวนสินค้าถ้าอยู่ในตะกร้าแล้ว
+    } else {
+        cart.push({ ...product, size, quantity }); // เพิ่มสินค้าใหม่ในตะกร้า
+    }
 
-            updateCartCount(); // อัปเดตจำนวนสินค้าในตะกร้า
-            renderProducts(products); // แสดงสินค้าพร้อมอัปเดตจำนวนใน stock
-            // เรียกใช้เพื่อแสดงหรือซ่อนการส่งฟรี
-            toggleFreeShippingOption();
-            // แสดงอนิเมชั่นเมื่อเพิ่มสินค้าลงตะกร้า
-            goToCartBtn.classList.add('added-to-cart');
-            setTimeout(() => {
-                goToCartBtn.classList.remove('added-to-cart');
-            }, 500);
-        }
+    updateCartCount();
+    renderProducts(products.filter(product => currentTab === 'All' || product.category === currentTab)); // แสดงสินค้าตามหมวดหมู่ปัจจุบัน
+    toggleFreeShippingOption();
+
+    goToCartBtn.classList.add('added-to-cart');
+    setTimeout(() => {
+        goToCartBtn.classList.remove('added-to-cart');
+    }, 500);
+}
+
 
         // ฟังก์ชันอัปเดตจำนวนสินค้าในตะกร้า
         function updateCartCount() {
