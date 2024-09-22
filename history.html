@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IIIRN-SHOP ระบบร้านค้า & แสดงข้อมูลการสั่งซื้อ</title>
+    <title>แสดงข้อมูลการสั่งซื้อ</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
@@ -13,14 +14,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 </head>
 
-<body class="bg-yellow-50">
+<body class="bg-amber-50">
     <!-- Product Selection -->
     <div id="product-selection" class="max-w-md mx-auto pt-20">
         <div class="fixed top-0 left-0 w-full bg-white shadow z-50">
             <div class="flex justify-between items-center p-4">
                 <div class="flex items-center">
                     <div class="w-12 h-12 rounded-lg items-center">
-                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                        <img src="https://lh5.googleusercontent.com/d/1PjDy6iy0ycKxyRXKFYpiAWlA2i8X9UWW"
                             alt="Profile Image" id="profileImage" class="w-12 h-12 bg-white rounded-lg">
                     </div>
                     <div class="pl-4">
@@ -30,7 +31,7 @@
                 </div>
                 <div class="flex items-center">
                 <div class="w-12 h-12 rounded-lg items-center">
-                <img src="https://lh5.googleusercontent.com/d/17VYrYx47MjT67L3nQ_PUsiABUPN00DjX" alt="Profile Image"  class="w-12 h-12 bg-white rounded-lg">
+                <img src="https://lh5.googleusercontent.com/d/1PjDy6iy0ycKxyRXKFYpiAWlA2i8X9UWW" alt="Profile Image"  class="w-12 h-12 bg-white rounded-lg">
                 </div>
             </div>
         </div>
@@ -68,8 +69,8 @@
     </div>
 
     <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxiBmdJ7JNSiUcebGh-ws8APKjEGOaF_-QWUMNvW4heozkxL4rg4REkHwdVLYgmAEQqYA/exec';
-        const LIFF_ID = '2001192277-lO2ONg1W'; 
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxdUHOPhzdZLf-G0qz4WUjyV57RKFyFe7kRem4ieu3cRAO95wJ-ltpE15o2SSJvU3_H/exec';
+        const LIFF_ID = '2005629952-QrAW2X6D';         
         const ROWS_PER_PAGE = 15;
         let currentPage = 1;
         let tableData = [];
@@ -195,7 +196,7 @@
                 <td class="py-2 px-4 border-b">${formatDate(order.timestamp)}</td>
                 <td class="py-2 px-4 border-b">${paymentIcon}</td> <!-- แสดงไอคอนแทนข้อความ -->
                 <td class="py-2 px-4 border-b">
-                    <button class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-700" onclick="showDetails('${order.orderId}')">
+                    <button class="bg-amber-800 text-white py-1 px-3 rounded hover:bg-blue-700" onclick="showDetails('${order.orderId}')">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
                             <path d="M8 7L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M8 11L12 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -226,7 +227,7 @@
         function addPaginationButton(text, page) {
             const pagination = document.getElementById('pagination');
             const button = document.createElement('button');
-            button.className = `mx-1 px-3 py-1 rounded ${page === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-300'}`;
+            button.className = `mx-1 px-3 py-1 rounded ${page === currentPage ? 'bg-amber-800 text-white' : 'bg-gray-300'}`;
             button.innerText = text;
             button.onclick = () => {
                 currentPage = page;
