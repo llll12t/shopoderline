@@ -481,11 +481,13 @@
         loadMoreBtn.addEventListener('click', () => {
             currentPage += 1; // เพิ่มหน้าปัจจุบันเมื่อกดปุ่มโหลดเพิ่ม
             const products = JSON.parse(localStorage.getItem('products')); // ดึงสินค้าจาก localStorage
-            renderProducts(products); // แสดงสินค้าที่เพิ่มขึ้น
+            renderProducts(products, true); // แสดงสินค้าที่เพิ่มขึ้น โดยไม่เคลียร์สินค้าที่มีอยู่
         });
+
 
         // ฟังก์ชันค้นหาสินค้าตามชื่อ
         function searchProducts() {
+            currentPage = 0; // รีเซ็ตหน้าปัจจุบันเมื่อค้นหาใหม่
             const query = document.getElementById('search-input').value.toLowerCase();
             const products = JSON.parse(localStorage.getItem('products'));
             const filteredProducts = products.filter(product => product.name.toLowerCase().includes(query));
@@ -585,6 +587,8 @@
             currentTab = category; // เปลี่ยนหมวดหมู่ปัจจุบัน
             currentPage = 0; // รีเซ็ตหน้าปัจจุบัน
             const products = JSON.parse(localStorage.getItem('products')); // ดึงสินค้าจาก localStorage
+            renderProducts(products); // แสดงสินค้าตามหมวดหมู่
+            renderTabs(products); // แสดงแท็บใหม่
             const filteredProducts = category === 'All'
                 ? products
                 : products.filter(product => product.category === category); // กรองสินค้าตามหมวดหมู่
@@ -606,42 +610,69 @@
         }
 
         // ฟังก์ชันแสดงสินค้าตามหมวดหมู่
-        function renderProducts(products) {
-            productList.innerHTML = ''; // เคลียร์สินค้าก่อนหน้า
-            const filteredProducts = currentTab === 'All' ? products : products.filter(product => product.category === currentTab);
-
-            const productsToDisplay = filteredProducts.slice(0, (currentPage + 1) * productsPerPage); // แสดงสินค้าจำนวนที่กำหนด
-            const catalogMap = new Map();
-
-            productsToDisplay.forEach(product => {
-                const catalog = product.category || 'Uncategorized';
-                if (!catalogMap.has(catalog)) {
-                    catalogMap.set(catalog, []);
+        function renderProducts(products, append = false) {
+                if (!append) {
+                    productList.innerHTML = ''; // เคลียร์รายการสินค้าก่อนหน้า
                 }
-                catalogMap.get(catalog).push(product); // เพิ่มสินค้าลงในหมวดหมู่
-            });
 
-            catalogMap.forEach((items, catalog) => {
-                const catalogSection = document.createElement('div');
-                catalogSection.innerHTML = `
-            <div class="grid grid-cols-2 gap-4 py-4">
-                ${items.map(product => createProductHtml(product)).join('')}
-            </div>
-        `;
-                productList.appendChild(catalogSection); // เพิ่มสินค้าในหมวดหมู่ลงในหน้าเว็บ
-            });
+                const filteredProducts = currentTab === 'All' ? products : products.filter(product => product.category === currentTab);
 
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', addToCart); // เมื่อคลิกเพิ่มสินค้าลงตะกร้า
-            });
+                const startIndex = append ? currentPage * productsPerPage : 0;
+                const endIndex = (currentPage + 1) * productsPerPage;
 
-            if (filteredProducts.length > productsToDisplay.length) {
-                loadMoreContainer.classList.remove('hidden'); // แสดงปุ่ม "เพิ่มเติม" หากมีสินค้าเพิ่ม
-            } else {
-                loadMoreContainer.classList.add('hidden'); // ซ่อนปุ่ม "เพิ่มเติม" หากไม่มีสินค้าเพิ่ม
+                const productsToDisplay = filteredProducts.slice(startIndex, endIndex); // แสดงสินค้าจนถึงหน้าปัจจุบัน
+
+                const catalogMap = new Map();
+
+                productsToDisplay.forEach(product => {
+                    const catalog = product.category || 'Uncategorized';
+                    if (!catalogMap.has(catalog)) {
+                        catalogMap.set(catalog, []);
+                    }
+                    catalogMap.get(catalog).push(product); // เพิ่มสินค้าลงในหมวดหมู่
+                });
+
+                catalogMap.forEach((items, catalog) => {
+                    let catalogSection;
+
+                    if (append) {
+                        // ค้นหาหมวดหมู่ที่มีอยู่เพื่อเพิ่มสินค้า
+                        catalogSection = productList.querySelector(`[data-catalog="${catalog}"]`);
+                        if (!catalogSection) {
+                            catalogSection = document.createElement('div');
+                            catalogSection.setAttribute('data-catalog', catalog);
+                            catalogSection.innerHTML = `
+                                <div class="grid grid-cols-2 gap-4 py-4">
+                                    ${items.map(product => createProductHtml(product)).join('')}
+                                </div>
+                            `;
+                            productList.appendChild(catalogSection);
+                        } else {
+                            const grid = catalogSection.querySelector('.grid');
+                            grid.innerHTML += items.map(product => createProductHtml(product)).join('');
+                        }
+                    } else {
+                        catalogSection = document.createElement('div');
+                        catalogSection.setAttribute('data-catalog', catalog);
+                        catalogSection.innerHTML = `
+                            <div class="grid grid-cols-2 gap-4 py-4">
+                                ${items.map(product => createProductHtml(product)).join('')}
+                            </div>
+                        `;
+                        productList.appendChild(catalogSection);
+                    }
+                });
+
+                document.querySelectorAll('.add-to-cart').forEach(btn => {
+                    btn.addEventListener('click', addToCart); // เมื่อคลิกเพิ่มสินค้าลงตะกร้า
+                });
+
+                if (filteredProducts.length > endIndex) {
+                    loadMoreContainer.classList.remove('hidden'); // แสดงปุ่ม "เพิ่มเติม" หากมีสินค้าเพิ่ม
+                } else {
+                    loadMoreContainer.classList.add('hidden'); // ซ่อนปุ่ม "เพิ่มเติม" หากไม่มีสินค้าเพิ่ม
+                }
             }
-        }
-
         // ฟังก์ชันสำหรับแสดงสินค้าด้วย HTML
         function createProductHtml(product) {
             let sizeOptions = '<option value="" disabled selected>เลือกไซต์</option>'; // ค่าเริ่มต้นเป็น "เลือกไซต์"
