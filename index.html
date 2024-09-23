@@ -542,18 +542,17 @@
 
             categories.forEach(category => {
                 const tabButton = document.createElement('button');
-                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-xl', 'focus:outline-none', 'bg-white','flex', 'border', 'border-lime-400', 'items-center', 'justify-start', 'space-x-2');
-                tabButton.setAttribute('data-category', category); // เพิ่ม data-attribute สำหรับหมวดหมู่
+                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'border', 'border-yellow-400', 'items-center', 'justify-start', 'space-x-2');
 
                 // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
                 if (category === currentTab) {
-                    tabButton.classList.add('active', 'bg-lime-200', 'text-black');
+                    tabButton.classList.add('active', 'bg-yellow-200', 'text-black');
                 }
 
                 const categoryImage = document.createElement('img');
                 categoryImage.src = getCategoryImage(category, products); // ดึงรูปหมวดหมู่
                 categoryImage.alt = category;
-                categoryImage.classList.add('w-12', 'h-12', 'rounded-xl');
+                categoryImage.classList.add('w-12', 'h-12', 'rounded-lg');
 
                 const categoryLabel = document.createElement('span');
                 categoryLabel.textContent = category === 'All' ? 'รวมทั้งหมด' : category; // เปลี่ยนชื่อเป็น "รวมทั้งหมด"
@@ -685,45 +684,44 @@
             const product = products.find(p => p.id === productId);
 
             if (!product) {
-                console.error(`Product with ID ${productId} not found.`); // หากไม่พบสินค้าตาม ID
+                console.error(`Product with ID ${productId} not found.`);
                 return;
             }
 
             const sizeElement = document.querySelector(`.product-size[data-id="${productId}"]`);
             if (!sizeElement) {
-                console.error(`Size element not found for product ID: ${productId}`); // หากไม่พบข้อมูลขนาดสินค้า
+                console.error(`Size element not found for product ID: ${productId}`);
                 return;
             }
 
-            const size = sizeElement.value.split(' ')[0]; // ดึงขนาดจาก dropdown
+            const size = sizeElement.value.split(' ')[0];
             if (!size) {
-                sizeElement.style.border = "2px solid red"; // เปลี่ยน border ของ dropdown เป็นสีแดงเมื่อไม่ได้เลือกไซต์
+                sizeElement.style.border = "2px solid red";
                 return;
             }
 
-            sizeElement.style.border = ""; // รีเซ็ต border กลับเป็นปกติ
+            sizeElement.style.border = ""; // Reset border
 
-            const quantity = 1; // กำหนดค่าเริ่มต้นจำนวนเป็น 1
+            const quantity = 1; // กำหนดค่าเริ่มต้นเป็น 1
 
             if (product[size] < quantity) {
-                alert('สินค้าในขนาดนี้หมดแล้ว'); // หากสินค้าหมด
+                alert('สินค้าในขนาดนี้หมดแล้ว');
                 return;
             }
 
-            product[size] -= quantity; // ลดจำนวนสินค้าใน stock
+            product[size] -= quantity;
 
             const productInCart = cart.find(item => item.id === productId && item.size === size);
             if (productInCart) {
-                productInCart.quantity += quantity; // หากสินค้ามีอยู่ในตะกร้าแล้ว ให้เพิ่มจำนวน
+                productInCart.quantity += quantity; // เพิ่มจำนวนสินค้าถ้าอยู่ในตะกร้าแล้ว
             } else {
-                cart.push({ ...product, size, quantity }); // หากไม่มี ให้เพิ่มสินค้าลงในตะกร้า
+                cart.push({ ...product, size, quantity }); // เพิ่มสินค้าใหม่ในตะกร้า
             }
 
-            updateCartCount(); // อัปเดตจำนวนสินค้าในตะกร้า
-            renderProducts(products); // แสดงสินค้าพร้อมอัปเดตจำนวนใน stock
-            // เรียกใช้เพื่อแสดงหรือซ่อนการส่งฟรี
+            updateCartCount();
+            renderProducts(products.filter(product => currentTab === 'All' || product.category === currentTab)); // แสดงสินค้าตามหมวดหมู่ปัจจุบัน
             toggleFreeShippingOption();
-            // แสดงอนิเมชั่นเมื่อเพิ่มสินค้าลงตะกร้า
+
             goToCartBtn.classList.add('added-to-cart');
             setTimeout(() => {
                 goToCartBtn.classList.remove('added-to-cart');
