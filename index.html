@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IIIRNSHOP</title>
+    <title>SHOP</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -542,11 +542,11 @@
 
             categories.forEach(category => {
                 const tabButton = document.createElement('button');
-                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'border', 'border-yellow-400', 'items-center', 'justify-start', 'space-x-2');
+                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'bg-white', 'border', 'border-lime-200', 'items-center', 'justify-start', 'space-x-2');
 
                 // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
                 if (category === currentTab) {
-                    tabButton.classList.add('active', 'bg-yellow-200', 'text-black');
+                    tabButton.classList.add('active', 'bg-lime-200', 'text-black');
                 }
 
                 const categoryImage = document.createElement('img');
@@ -602,8 +602,6 @@
 
 
         }
-
-
 
         // ฟังก์ชันแสดงสินค้าตามหมวดหมู่
         function renderProducts(products) {
