@@ -542,12 +542,14 @@
 
             categories.forEach(category => {
                 const tabButton = document.createElement('button');
-                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'bg-white', 'border', 'border-lime-200', 'items-center', 'justify-start', 'space-x-2');
+                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-xl', 'focus:outline-none', 'bg-white','flex', 'border', 'border-lime-400', 'items-center', 'justify-start', 'space-x-2');
+                tabButton.setAttribute('data-category', category); // เพิ่ม data-attribute สำหรับหมวดหมู่
 
                 // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
                 if (category === currentTab) {
                     tabButton.classList.add('active', 'bg-lime-200', 'text-black');
                 }
+
 
                 const categoryImage = document.createElement('img');
                 categoryImage.src = getCategoryImage(category, products); // ดึงรูปหมวดหมู่
