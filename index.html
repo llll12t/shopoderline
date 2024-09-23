@@ -630,47 +630,57 @@
 
             renderProducts(filteredProducts); // แสดงสินค้าตามหมวดหมู่
             renderTabs(products); // แสดงแท็บใหม่
-        }
 
-
-        // ฟังก์ชันแสดงสินค้าตามหมวดหมู่หรือการค้นหา
-        function renderProducts(products) {
-            productList.innerHTML = ''; // เคลียร์สินค้าก่อนหน้า
-            const productsToDisplay = products.slice(0, (currentPage + 1) * productsPerPage); // แสดงสินค้าจำนวนที่กำหนด
-
-            // สร้างหมวดหมู่และแสดงสินค้า
-            const catalogMap = new Map();
-            productsToDisplay.forEach(product => {
-                const catalog = product.category || 'Uncategorized';
-                if (!catalogMap.has(catalog)) {
-                    catalogMap.set(catalog, []);
-                }
-                catalogMap.get(catalog).push(product); // เพิ่มสินค้าลงในหมวดหมู่
-            });
-
-            catalogMap.forEach((items, catalog) => {
-                const catalogSection = document.createElement('div');
-                catalogSection.innerHTML = `
-                    <div class="grid grid-cols-2 gap-4 py-4">
-                        ${items.map(product => createProductHtml(product)).join('')}
-                    </div>
-                `;
-                productList.appendChild(catalogSection); // เพิ่มสินค้าในหมวดหมู่ลงในหน้าเว็บ
-            });
-
-            // เพิ่ม event listener ให้ปุ่ม "ซื้อ"
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', addToCart); // เมื่อคลิกเพิ่มสินค้าลงตะกร้า
-            });
-
-            // แสดงหรือซ่อนปุ่ม "เพิ่มเติม"
-            if (products.length > productsToDisplay.length) {
-                loadMoreContainer.classList.remove('hidden'); // แสดงปุ่ม "เพิ่มเติม" หากมีสินค้าเพิ่ม
-            } else {
-                loadMoreContainer.classList.add('hidden'); // ซ่อนปุ่ม "เพิ่มเติม" หากไม่มีสินค้าเพิ่ม
+            // เลื่อนแถบ `tab-nav` ให้หมวดหมู่ที่เลือกอยู่ในตำแหน่งที่มองเห็น
+            const selectedTab = document.querySelector(`button[data-category="${category}"]`);
+            if (selectedTab) {
+                selectedTab.scrollIntoView({ behavior: 'smooth', inline: 'center' });
             }
         }
 
+
+
+        // ในส่วนของ renderTabs เพิ่ม data-category สำหรับแต่ละปุ่มหมวดหมู่
+        function renderTabs(products) {
+            tabNav.innerHTML = ''; // เคลียร์แท็บเดิม
+            let categories = [...new Set(products.map(product => product.category || 'Uncategorized'))];
+
+            // ใส่หมวดหมู่ 'All' ไว้เป็นตัวเลือกแรกเสมอ
+            categories = ['All', ...categories.filter(category => category !== 'All')];
+
+            const tabContainer = document.createElement('div');
+            tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto', 'py-2');
+
+            categories.forEach(category => {
+                const tabButton = document.createElement('button');
+                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-lg', 'focus:outline-none', 'flex', 'border', 'border-lime-400', 'items-center', 'justify-start', 'space-x-2');
+
+                // เพิ่ม data-category สำหรับแต่ละปุ่ม
+                tabButton.setAttribute('data-category', category);
+
+                // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
+                if (category === currentTab) {
+                    tabButton.classList.add('active', 'bg-lime-200', 'text-black');
+                }
+
+                const categoryImage = document.createElement('img');
+                categoryImage.src = getCategoryImage(category, products); // ดึงรูปหมวดหมู่
+                categoryImage.alt = category;
+                categoryImage.classList.add('w-12', 'h-12', 'rounded-lg');
+
+                const categoryLabel = document.createElement('span');
+                categoryLabel.textContent = category === 'All' ? 'รวมทั้งหมด' : category; // เปลี่ยนชื่อเป็น "รวมทั้งหมด"
+                categoryLabel.classList.add('text-sm');
+
+                tabButton.appendChild(categoryImage);
+                tabButton.appendChild(categoryLabel);
+                tabButton.addEventListener('click', () => switchTab(category)); // เมื่อคลิกเปลี่ยนหมวดหมู่
+
+                tabContainer.appendChild(tabButton);
+            });
+
+            tabNav.appendChild(tabContainer); // เพิ่มแท็บหมวดหมู่ลงในหน้าเว็บ
+        }
         // ฟังก์ชันสำหรับแสดงสินค้าด้วย HTML
         function createProductHtml(product) {
             let sizeOptions = '<option value="" disabled selected>เลือกไซต์</option>'; // ค่าเริ่มต้นเป็น "เลือกไซต์"
