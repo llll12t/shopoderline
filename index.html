@@ -622,25 +622,35 @@
 
         // ฟังก์ชันเปลี่ยนหมวดหมู่สินค้า
         function switchTab(category) {
-    currentTab = category; // เปลี่ยนหมวดหมู่ปัจจุบัน
-    currentPage = 0; // รีเซ็ตหน้าปัจจุบัน
-    const products = JSON.parse(localStorage.getItem('products')); // ดึงสินค้าจาก localStorage
-    const filteredProducts = category === 'All'
-        ? products
-        : products.filter(product => product.category === category); // กรองสินค้าตามหมวดหมู่
+            currentTab = category; // เปลี่ยนหมวดหมู่ปัจจุบัน
+            currentPage = 0; // รีเซ็ตหน้าปัจจุบัน
+            const products = JSON.parse(localStorage.getItem('products')); // ดึงสินค้าจาก localStorage
+            const filteredProducts = category === 'All'
+                ? products
+                : products.filter(product => product.category === category); // กรองสินค้าตามหมวดหมู่
 
-    renderProducts(filteredProducts); // แสดงสินค้าตามหมวดหมู่
-    renderTabs(products); // แสดงแท็บใหม่
+            renderProducts(filteredProducts); // แสดงสินค้าตามหมวดหมู่
+            renderTabs(products); // แสดงแท็บใหม่
 
-    // เลื่อนไปยังปุ่มที่ถูกเลือก
-    const selectedTabButton = document.querySelector(`[data-category="${category}"]`);
-    if (selectedTabButton) {
-        selectedTabButton.scrollIntoView({
-            behavior: 'smooth',
-            inline: 'center'
-        });
-    }
-}
+            // เลือกปุ่มที่ถูกคลิกและเปลี่ยนสีพื้นหลัง
+            const tabButtons = document.querySelectorAll('[data-category]');
+            tabButtons.forEach(button => {
+                if (button.getAttribute('data-category') === category) {
+                    button.style.backgroundColor = '#D9F99D'; // เปลี่ยนพื้นหลังเป็นสี lime เมื่อ active
+                } else {
+                    button.style.backgroundColor = 'white'; // เปลี่ยนกลับเป็นสีขาวถ้าไม่ได้ถูกเลือก
+                }
+            });
+
+            // เลื่อนไปยังปุ่มที่ถูกเลือก
+            const selectedTabButton = document.querySelector(`[data-category="${category}"]`);
+            if (selectedTabButton) {
+                selectedTabButton.scrollIntoView({
+                    behavior: 'smooth',
+                    inline: 'center'
+                });
+            }
+        }
 
         // ฟังก์ชันแสดงสินค้าตามหมวดหมู่หรือการค้นหา
         function renderProducts(products) {
