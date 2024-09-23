@@ -58,13 +58,13 @@
 <body class="bg-slate-800">
     <!-- ฟังก์ชันการแสดงรายการสินค้า -->
     <div id="product-selection" class="max-w-md mx-auto pt-20">
-        <div class=" p-4 rounded-lg">
+        <div class=" p-4 rounded-xl">
             <div class="fixed top-0 left-0 w-full bg-white  border border-t-slate-800 shadow z-50">
                 <div class="flex justify-between items-center p-4">
                     <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-lg items-center">
+                        <div class="w-12 h-12 rounded-xl items-center">
                             <img src="https://via.placeholder.com/40?text=PROFILE"
-                                alt="Profile Image" id="profileImage" class="w-12 h-12 bg-white rounded-lg">
+                                alt="Profile Image" id="profileImage" class="w-12 h-12 bg-white rounded-xl">
                         </div>
                         <div class="pl-4">
                             <p class="text-slate-800 text-xs">ยินดีต้อนรับ</p>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <p class="bg-lime-200 mx-1 rounded-lg w-full max-w-24 p-2 text-slate-800 text-md font-bold flex items-center gap-2"
+                        <p class="bg-lime-200 mx-1 rounded-xl w-full max-w-24 p-2 text-slate-800 text-md font-bold flex items-center gap-2"
                             id="userPoints">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
                                 color="#000000" fill="none">
@@ -86,7 +86,7 @@
                             </svg>
                             0
                         </p>
-                        <button id="go-to-cart" class="bg-slate-800 text-white text-md py-2 px-4 flex items-center gap-2 rounded-lg ml-4">
+                        <button id="go-to-cart" class="bg-slate-800 text-white text-md py-2 px-4 flex items-center gap-2 rounded-xl ml-4">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
                                 color="#ffffff" fill="none">
                                 <path
@@ -112,12 +112,12 @@
                 </div>
                 <!-- เพิ่มช่องค้นหาสินค้า -->
                 <div class="relative ">
-                    <input type="text" id="search-input" placeholder="ค้นหาสินค้า" class="w-full px-4 py-2 border rounded-lg ">
+                    <input type="text" id="search-input" placeholder="ค้นหาสินค้า" class="w-full px-4 py-2 border rounded-xl ">
                 </div>
                 <div id="product-list" class="text-center">
                 </div>
                 <div id="load-more-container" class="text-center m-4 hidden">
-                    <button id="load-more" class="bg-white px-4 py-2 rounded-lg">เพิ่มเติม</button>
+                    <button id="load-more" class="bg-white px-4 py-2 rounded-xl">เพิ่มเติม</button>
                 </div>
             </div>
         </div>
@@ -125,17 +125,17 @@
 
     <!-- ฟังก์ชันการแสดงตะกร้าสินค้า -->
     <div id="cart-view" class="max-w-md mx-auto pt-20 hidden">
-        <div class="bg-white rounded-lg p-4 m-2">
+        <div class="bg-white rounded-xl p-4 m-2">
             <div class="fixed top-0 left-0 w-full bg-white  border border-t-slate-800 shadow-md z-50">
                 <div class="flex justify-between items-center p-4">
                     <h2 class="text-md font-semibold">ตะกร้าสินค้า</h2>
                     <div id="back-to-products"
-                        class="bg-white opacitywhite text-center font-bold py-2 w-36 border rounded-lg">กลับ ร้านค้า
+                        class="bg-white opacitywhite text-center font-bold py-2 w-36 border rounded-xl">กลับ ร้านค้า
                     </div>
                 </div>
             </div>
 
-            <div id="cart-items" class="bg-white rounded-lg"></div>
+            <div id="cart-items" class="bg-white rounded-xl"></div>
 
             <div class="pt-4">
                 <div class="flex justify-between items-center mb-4">
@@ -143,7 +143,7 @@
                         <span class="text-slate-800 text-xs" style="float: inline-start;">ส่งฟรีเมื่อยอดซื้อครบ 500
                             บาท</span>
                     </label>
-                    <select id="shipping-options" class="bg-white border border-gray-400 rounded-lg p-2">
+                    <select id="shipping-options" class="bg-white border border-gray-400 rounded-xl p-2">
                         <option value="A00000">ส่งพรุ่งนี้ ส่งฟรี(ขั้นต่ำ 500฿ ไม่เกิน5กม.)</option>
                         <option value="A00001">ส่งด่วน(เรียกเก็บทางแชท)</option>
                         <option value="A00002">ส่งขนส่ง(เรียกเก็บทางแชท)</option>
@@ -168,7 +168,7 @@
 
 
             <button id="go-to-shipping"
-                class="w-full bg-slate-800 text-white p-4 rounded-lg font-semibold hidden">ถัดไป</button>
+                class="w-full bg-slate-800 text-white p-4 rounded-xl font-semibold hidden">ถัดไป</button>
         </div>
     </div>
 
@@ -181,7 +181,7 @@
                 <div class="flex justify-between items-center p-4">
                     <h2 class="text-md font-semibold">การจัดส่ง</h2>
                     <button id="back-to-cart"
-                        class="bg-white opacitywhite text-center font-bold py-2 w-36 border rounded-lg">กลับ
+                        class="bg-white opacitywhite text-center font-bold py-2 w-36 border rounded-xl">กลับ
                         ตะกร้าสินค้า</button>
                 </div>
             </div>
@@ -194,23 +194,23 @@
                     <div class="mb-4">
                         <label for="username" class="block text-gray-100">ชื่อ:</label>
                         <input type="text" id="username" placeholder="Name"
-                            class="block w-full mb-2 p-2 border rounded-lg" required />
+                            class="block w-full mb-2 p-2 border rounded-xl" required />
                     </div>
                     <div class="mb-4">
                         <label for="contact" class="block text-gray-100">เบอร์ติดต่อ:</label>
                         <input type="text" id="contact" placeholder="Contact"
-                            class="block w-full mb-2 p-2 border rounded-lg" required />
+                            class="block w-full mb-2 p-2 border rounded-xl" required />
                     </div>
                     <div class="mb-4">
                         <label for="address" class="block text-gray-100">ที่อยู่:</label>
-                        <textarea id="address" placeholder="Address" class="block w-full mb-2 p-2 border rounded-lg"
+                        <textarea id="address" placeholder="Address" class="block w-full mb-2 p-2 border rounded-xl"
                             style="height: 150px;" required></textarea>
 
                     </div>
                     <div class="mb-4">
                         <label for="note" class="block text-gray-100">หมายเหตุ:</label>
                         <textarea id="note" placeholder="หมายเหตุเพิ่มเติม"
-                            class="block w-full mb-2 p-2 border rounded-lg" style="height: 100px;"></textarea>
+                            class="block w-full mb-2 p-2 border rounded-xl" style="height: 100px;"></textarea>
                     </div>
 
                     <div class="mb-4">
@@ -220,7 +220,7 @@
                     </div>
                     <input type="hidden" id="userlineid" name="userlineid">
                 </div>
-                <button type="submit" class="bg-slate-950 text-white p-4 w-full rounded-lg mt-4">สั่งซื้อสินค้า</button>
+                <button type="submit" class="bg-slate-950 text-white p-4 w-full rounded-xl mt-4">สั่งซื้อสินค้า</button>
             </form>
         </div>
     </div>
@@ -231,18 +231,18 @@
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <div class=" rounded-lg overflow-hidden  transform transition-all w-full">
+            <div class=" rounded-xl overflow-hidden  transform transition-all w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">รายละเอียดสั่งซื้อ</h3>
                     <div class="mt-2">
-                        <div id="order-details-content" class="bg-gray-100 p-4 rounded-lg"></div>
+                        <div id="order-details-content" class="bg-gray-100 p-4 rounded-xl"></div>
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button id="confirm-order"
-                        class="w-full inline-flex justify-center rounded-lg border border-transparent  px-4 py-4 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">ยืนยันการสั่งซื้อ</button>
+                        class="w-full inline-flex justify-center rounded-xl border border-transparent  px-4 py-4 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">ยืนยันการสั่งซื้อ</button>
                     <button id="close-modal"
-                        class="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300  px-4 py-2 bg-white text-base font-medium text-gray-100 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">ยกเลิก</button>
+                        class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300  px-4 py-2 bg-white text-base font-medium text-gray-100 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">ยกเลิก</button>
                     <div id="order-status" class="px-4 py-3 sm:px-6 text-center text-sm hidden"></div>
 
                 </div>
@@ -660,9 +660,9 @@
             }
 
             return `
-        <div class="bg-slate-100 p-3 flex flex-col rounded-lg border     relative">
+        <div class="bg-slate-100 p-3 flex flex-col rounded-xl border     relative">
             <div class="relative">
-                <img src="${product['img-product']}" alt="${product.name}" class="w-full h-40 object-cover rounded-lg">
+                <img src="${product['img-product']}" alt="${product.name}" class="w-full h-40 object-cover rounded-xl">
                 <div class="absolute top-0 right-0 bg-slate-800 text-white py-1  px-2 rounded-bl-lg rounded-tr-lg">
                     ${product.Price} บาท
                 </div>
@@ -671,8 +671,8 @@
                 <h3 class="text-md font-semibold text-gray-900">${product.name}</h3>
             </div>
             <div class="mt-2 flex justify-between items-center">
-                <select class="bg-white border border-slate-800 py-2 rounded-lg product-size" data-id="${product.id}">  ${sizeOptions} </select>
-                <button class="bg-lime-200 text-black p-2 rounded-lg  focus:outline-none focus:ring-2 add-to-cart" data-id="${product.id}" style="width: 35%;">ซื้อ</button>
+                <select class="bg-white border border-slate-800 py-2 rounded-xl product-size" data-id="${product.id}">  ${sizeOptions} </select>
+                <button class="bg-lime-200 text-black p-2 rounded-xl  focus:outline-none focus:ring-2 add-to-cart" data-id="${product.id}" style="width: 35%;">ซื้อ</button>
             </div>
         </div>
     `;
@@ -786,16 +786,16 @@
                 cartItemEl.classList.add('flex', 'items-center', 'justify-between', 'border-b', 'p-2');
 
                 cartItemEl.innerHTML = `
-            <img src="${item['img-product']}" alt="${item.name}" class="w-20 h-20  rounded-lg mr-4">
+            <img src="${item['img-product']}" alt="${item.name}" class="w-20 h-20  rounded-xl mr-4">
             <div class="flex-1">
                 <h3 class="text-md font-semibold">${item.name}</h3>
                 <p class="text-gray-600">${item.size}</p>
                 <p class="text-gray-600 item-price" data-price="${item.Price}">${item.Price.toFixed(2)} บาท</p>
             </div>
             <div class="flex flex-col items-center">
-                <button onclick="increment(${index})" class="bg-gray-200 rounded-lg w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
+                <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
                 <span class="w-8 text-center item-quantity">${item.quantity}</span>
-                <button onclick="decrement(${index})" class="bg-gray-200 rounded-lg w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
+                <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
             </div>
         `;
                 cartItems.appendChild(cartItemEl); // แสดงสินค้าในตะกร้า
