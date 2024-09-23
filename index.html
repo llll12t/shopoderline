@@ -362,6 +362,9 @@
       updateTotalPrice(); // อัปเดตราคารวมใหม่หลังจากเปลี่ยนการจัดส่ง
     }
 
+
+
+
     // เริ่มการทำงานเมื่อโหลดหน้าเว็บ
     window.onload = async function () {
       await initializeLiff(); // เรียกใช้งาน LIFF
@@ -369,6 +372,7 @@
 
       fetchProducts(); // ดึงข้อมูลสินค้า
     };
+
 
     // ฟังก์ชันเริ่มต้นการใช้งาน LIFF
     async function initializeLiff() {
@@ -1080,4 +1084,5 @@
   </script>
   <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
 </body>
+
 </html>
