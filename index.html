@@ -556,7 +556,7 @@
 
             categories.forEach(category => {
                 const tabButton = document.createElement('button');
-                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-xl', 'focus:outline-none', 'bg-white', 'flex', 'border', 'border-lime-400', 'items-center', 'justify-start', 'space-x-2');
+                tabButton.classList.add('flex-shrink-0', 'px-1', 'py-1', 'pr-2', 'rounded-xl', 'focus:outline-none', 'bg-white', 'flex', 'items-center', 'justify-start', 'space-x-2');
                 tabButton.setAttribute('data-category', category); // เพิ่ม data-attribute สำหรับหมวดหมู่
 
                 // ทำให้หมวดหมู่ 'All' ถูก active ตั้งแต่เริ่มต้น
@@ -706,7 +706,7 @@
             }
 
             return `
-        <div class="bg-slate-100 p-3 flex flex-col rounded-xl border     relative">
+        <div class="bg-slate-100 p-3 flex flex-col rounded-xl border relative">
             <div class="relative">
                 <img src="${product['img-product']}" alt="${product.name}" class="w-full h-40 object-cover rounded-xl">
                 <div class="absolute top-0 right-0 bg-slate-800 text-white py-1  px-2 rounded-bl-lg rounded-tr-lg">
